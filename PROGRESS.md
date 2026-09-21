@@ -129,3 +129,13 @@
   pseudocode blocks, results table, license; MIT `LICENSE` + `.gitignore`
   present; working tree clean, `origin/master` up to date.
 - All AGENT.md phases remain complete. No code changes needed.
+
+## 2026-09-21 — Re-verification (no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  avg 91.1/82.0/68.6 (not black), 2.09 Mrays/s, keep 0.8%.
+- README checklist all PASS (emoji title, 4× screenshots, build/run,
+  gaussian/culling/residual pseudocode, benchmarks, license); `convert`
+  (ImageMagick 7.1.1) available; tracked files clean (no binary/PPM/logs);
+  tags v1.0-glt…v1.4-verify present; working tree clean, `origin/master`
+  up to date.
+- All AGENT.md phases remain complete. No code changes needed.
