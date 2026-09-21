@@ -5,14 +5,8 @@
 
 typedef struct { vec3 o, d; float tmax; } ray;
 
-typedef struct {
-    vec3 albedo;
-    vec3 normal;
-    float roughness;
-    int hit;
-    float t;
-    vec3 point;
-} hit_record;
+#define MAX_SPHERES 64
+#define MAX_PLANES 64
 
 typedef struct {
     vec3 center;
@@ -32,8 +26,16 @@ typedef struct {
     vec3 emission;
 } plane;
 
-#define MAX_SPHERES 64
-#define MAX_PLANES 64
+typedef struct {
+    vec3 albedo;
+    vec3 normal;
+    float roughness;
+    int hit;
+    float t;
+    vec3 point;
+    int emissive;
+    vec3 emission;
+} hit_record;
 
 typedef struct {
     sphere spheres[MAX_SPHERES];
@@ -63,6 +65,7 @@ static inline int intersect_sphere(ray r, sphere s, hit_record *rec) {
     rec->roughness = s.roughness;
     rec->hit = 1;
     rec->emissive = s.emissive;
+    rec->emission = s.emission;
     return 1;
 }
 
@@ -78,23 +81,24 @@ static inline int intersect_plane(ray r, plane p, hit_record *rec) {
     rec->roughness = p.roughness;
     rec->hit = 1;
     rec->emissive = p.emissive;
+    rec->emission = p.emission;
     return 1;
 }
 
-static inline int intersect_scene(ray r, const scene *s, hit_record *rec) {
+static inline int intersect_scene(ray r, const scene *sc, hit_record *rec) {
     rec->hit = 0;
     rec->t = r.tmax;
-    for (int i = 0; i < s->nspheres; i++) {
+    for (int i = 0; i < sc->nspheres; i++) {
         hit_record tmp = {0};
         tmp.t = rec->t;
-        if (intersect_sphere(r, s->spheres[i], &tmp) && tmp.t < rec->t) {
+        if (intersect_sphere(r, sc->spheres[i], &tmp) && tmp.t < rec->t) {
             *rec = tmp;
         }
     }
-    for (int i = 0; i < s->nplanes; i++) {
+    for (int i = 0; i < sc->nplanes; i++) {
         hit_record tmp = {0};
         tmp.t = rec->t;
-        if (intersect_plane(r, s->planes[i], &tmp) && tmp.t < rec->t) {
+        if (intersect_plane(r, sc->planes[i], &tmp) && tmp.t < rec->t) {
             *rec = tmp;
         }
     }
