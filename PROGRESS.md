@@ -98,3 +98,14 @@
   avg 91.2/81.9/68.4 (not black), 2.88 Mrays/s, keep 0.8%.
 - 4× 800×600 PNGs re-validated (`file`: 800×600 RGB); working tree clean,
   `origin/master` up to date; tagged `v1.4-verify` and pushed tags.
+
+## 2026-09-21 — Refresh screenshots with current binary
+- `make clean && make` warning-free; smoke test 200×150/4spp/train200:
+  avg 80.3/255 (not black), 3.16 Mrays/s, keep 0.8%.
+- Re-rendered all 4 scenes (800×600, 16 spp, train 1500) with the current
+  binary: cornell 23.3s/2.43 Mrays/s/keep 0.1% (3051 alive), bedroom
+  22.4s/2.51, dining 27.4s/1.92, staircase 21.7s/2.51; `convert`ed PPM→PNG,
+  all PNG headers valid (800×600 RGB).
+- Avg RGB matches README results table exactly (cornell 98/89/75, bedroom
+  126/96/74, dining 207/185/161, staircase 134/134/150); no code or README
+  changes needed.
