@@ -15,6 +15,9 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#if defined(__SSE2__) || defined(__AVX2__)
+#include <immintrin.h>
+#endif
 
 #define GLT_MAX_GAUSSIANS 65536
 #define GLT_TILE_SIZE 8
@@ -33,6 +36,12 @@ typedef struct {
     vec3 scale_dir;       /* direction log-scale (per axis) */
     float scale_norm;     /* normal log-scale */
     float scale_rough;    /* roughness log-scale */
+    /* precomputed inv-sigma = exp(-scale); refreshed on spawn/split.
+       Avoids 7+ expf calls per gaussian per query (the old hot loop). */
+    vec3 inv_pos;
+    vec3 inv_dir;
+    float inv_norm;
+    float inv_rough;
     float importance;     /* pruning metric (accumulated |color|*weight) */
     unsigned int morton;  /* spatial hash key for culling */
     int alive;
@@ -53,16 +62,66 @@ typedef struct {
     long eval_kept;
 } glt_model;
 
-/* ---------- separable Gaussian factors (Eq. 4) ---------- */
-static inline float gaussian_eval_1d(float x, float mean, float scale) {
-    float d = (x - mean) * expf(-scale);
+/* ---------- separable Gaussian factors (Eq. 4) ----------
+ * Hot loop: uses precomputed inv-sigma (no expf per query).
+ * SSE2 fast path evaluates the 3D squared distance with one
+ * 4-wide multiply per factor; scalar fallback is identical math. */
+static inline float gaussian_eval_1d_inv(float x, float mean, float inv) {
+    float d = (x - mean) * inv;
     return d * d;
 }
 
-static inline float gaussian_eval_3d(vec3 x, vec3 mean, vec3 scale) {
+static inline float gaussian_eval_3d_inv(vec3 x, vec3 mean, vec3 inv) {
+#if defined(__SSE2__)
+    __m128 d = _mm_sub_ps(_mm_set_ps(0.0f, x.z, x.y, x.x),
+                          _mm_set_ps(0.0f, mean.z, mean.y, mean.x));
+    __m128 s = _mm_set_ps(0.0f, inv.z, inv.y, inv.x);
+    __m128 n = _mm_mul_ps(d, s);
+    __m128 sq = _mm_mul_ps(n, n);
+    /* horizontal sum of the low 3 lanes */
+    __m128 sh = _mm_movehl_ps(sq, sq);          /* sh[0..1] = sq[2..3] */
+    __m128 sums = _mm_add_ps(sq, sh);
+    sums = _mm_add_ss(sums, _mm_shuffle_ps(sums, sums, 1));
+    return _mm_cvtss_f32(sums);
+#else
     vec3 d = vsub(x, mean);
-    d = vmulv(d, v3(expf(-scale.x), expf(-scale.y), expf(-scale.z)));
+    d = vmulv(d, inv);
     return vdot(d, d);
+#endif
+}
+
+/* compat wrappers (kept for callers that pass log-scale) */
+static inline float gaussian_eval_1d(float x, float mean, float scale) {
+    return gaussian_eval_1d_inv(x, mean, expf(-scale));
+}
+
+static inline float gaussian_eval_3d(vec3 x, vec3 mean, vec3 scale) {
+    return gaussian_eval_3d_inv(x, mean,
+        v3(expf(-scale.x), expf(-scale.y), expf(-scale.z)));
+}
+
+/* refresh precomputed inv-sigma after a scale change */
+static inline void glt_refresh_inv(glt_gaussian *g) {
+    g->inv_pos = v3(expf(-g->scale_pos.x), expf(-g->scale_pos.y), expf(-g->scale_pos.z));
+    g->inv_dir = v3(expf(-g->scale_dir.x), expf(-g->scale_dir.y), expf(-g->scale_dir.z));
+    g->inv_norm = expf(-g->scale_norm);
+    g->inv_rough = expf(-g->scale_rough);
+}
+
+/* Full 13D kernel weight with cheap position pre-cull.
+ * Returns 0 when culled; otherwise exp(-E). Albedo uses unit scale. */
+static inline float glt_kernel_weight(glt_gaussian *g, vec3 pos, vec3 dir,
+                                      vec3 norm, vec3 albedo, float roughness) {
+    float epos = gaussian_eval_3d_inv(pos, g->mean_pos, g->inv_pos);
+    if (epos > 9.0f) return 0.0f;               /* cheap spatial pre-cull */
+    float edir = gaussian_eval_3d_inv(dir, g->mean_dir, g->inv_dir);
+    vec3 ninv = v3(g->inv_norm, g->inv_norm, g->inv_norm);
+    float enrm = gaussian_eval_3d_inv(norm, g->mean_normal, ninv);
+    float ealb = gaussian_eval_3d_inv(albedo, g->mean_albedo, v3(1, 1, 1));
+    float erou = gaussian_eval_1d_inv(roughness, g->mean_roughness, g->inv_rough);
+    float exponent = -(epos + edir + enrm + ealb + erou);
+    if (exponent < GLT_CULL_THRESHOLD) return 0.0f;
+    return expf(exponent);
 }
 
 /* ---------- Morton code (Sec. 3.1) ---------- */
@@ -127,19 +186,9 @@ static inline void glt_build_index(glt_model *m) {
     glt_sort_ctx = m;
     qsort(m->sorted, (size_t)n, sizeof(int), glt_cmp_morton);
     int ncells = GLT_GRID_RES*GLT_GRID_RES*GLT_GRID_RES;
-    for (int i = 0; i <= ncells; i++) m->cell_start[i] = 0;
-    /* count per cell */
-    for (int i = 0; i < n; i++) {
-        int c = glt_cell_of_morton(m->gaussians[m->sorted[i]].morton);
-        if (c < 0) c = 0;
-        if (c >= ncells) c = ncells - 1;
-        m->cell_start[c + 1]++;
-    }
-    for (int i = 0; i < ncells; i++) m->cell_start[i + 1] += m->cell_start[i];
-    /* NOTE: sorted is currently grouped only by counting; do a stable
-       placement pass via temp buffer on stack is too big, so instead we
-       reorder with insertion using counts — simpler: re-sort is already
-       grouped, compute start offsets by scanning (sorted order). */
+    /* `sorted` is already grouped by morton order; record the first
+       sorted position of each cell, then fill gaps backwards so
+       cell_start[c] = first index with cell >= c. */
     int cur = -1, start = 0;
     int tmp_start[GLT_GRID_RES*GLT_GRID_RES*GLT_GRID_RES + 1];
     for (int i = 0; i <= ncells; i++) tmp_start[i] = -1;
@@ -186,17 +235,9 @@ static inline vec3 glt_eval_rgb(glt_model *m, vec3 pos, vec3 dir, vec3 norm,
             for (int k = m->cell_start[cell]; k < m->cell_start[cell + 1]; k++) {
                 glt_gaussian *g = &m->gaussians[m->sorted[k]];
                 visited++;
-                /* cheap position pre-cull before full 13D eval */
-                float epos = gaussian_eval_3d(pos, g->mean_pos, g->scale_pos);
-                if (epos > 9.0f) { m->eval_culled++; continue; }
-                float edir = gaussian_eval_3d(dir, g->mean_dir, g->scale_dir);
-                float enrm = gaussian_eval_3d(norm, g->mean_normal,
-                    v3(g->scale_norm, g->scale_norm, g->scale_norm));
-                float ealb = gaussian_eval_3d(albedo, g->mean_albedo, v3(1, 1, 1));
-                float erou = gaussian_eval_1d(roughness, g->mean_roughness, g->scale_rough);
-                float exponent = -(epos + edir + enrm + ealb + erou);
-                if (exponent < GLT_CULL_THRESHOLD) { m->eval_culled++; continue; }
-                float w = expf(exponent);
+                /* full 13D weight (position pre-cull inside) */
+                float w = glt_kernel_weight(g, pos, dir, norm, albedo, roughness);
+                if (w <= 0.0f) { m->eval_culled++; continue; }
                 m->eval_kept++;
                 L = vadd(L, vmul(g->color, w));
                 g->importance += w * (fabsf(g->color.x) + fabsf(g->color.y) + fabsf(g->color.z));
@@ -209,16 +250,8 @@ static inline vec3 glt_eval_rgb(glt_model *m, vec3 pos, vec3 dir, vec3 norm,
         glt_gaussian *g = &m->gaussians[i];
         if (!g->alive) continue;
         m->eval_total++;
-        float epos = gaussian_eval_3d(pos, g->mean_pos, g->scale_pos);
-        if (epos > 9.0f) { m->eval_culled++; continue; }
-        float edir = gaussian_eval_3d(dir, g->mean_dir, g->scale_dir);
-        float enrm = gaussian_eval_3d(norm, g->mean_normal,
-            v3(g->scale_norm, g->scale_norm, g->scale_norm));
-        float ealb = gaussian_eval_3d(albedo, g->mean_albedo, v3(1, 1, 1));
-        float erou = gaussian_eval_1d(roughness, g->mean_roughness, g->scale_rough);
-        float exponent = -(epos + edir + enrm + ealb + erou);
-        if (exponent < GLT_CULL_THRESHOLD) { m->eval_culled++; continue; }
-        float w = expf(exponent);
+        float w = glt_kernel_weight(g, pos, dir, norm, albedo, roughness);
+        if (w <= 0.0f) { m->eval_culled++; continue; }
         m->eval_kept++;
         L = vadd(L, vmul(g->color, w));
         g->importance += w * (fabsf(g->color.x) + fabsf(g->color.y) + fabsf(g->color.z));
@@ -254,6 +287,7 @@ static inline void glt_spawn(glt_model *m, vec3 pos, vec3 dir, vec3 norm,
     g->scale_dir = v3(-2, -2, -2);
     g->scale_norm = -2;
     g->scale_rough = -2;
+    glt_refresh_inv(g);
     g->importance = 1.0f;
     g->morton = glt_morton_of(pos);
     g->alive = 1;
@@ -281,6 +315,7 @@ static inline void glt_split(glt_model *m) {
         *g = parent;
         g->mean_pos = vadd(parent.mean_pos, vmul(off, (float)s));
         g->scale_pos = vsub(parent.scale_pos, v3(0.35f, 0.35f, 0.35f));
+        glt_refresh_inv(g);
         g->color = vmul(parent.color, 0.5f);
         g->importance = parent.importance * 0.5f;
         g->morton = glt_morton_of(g->mean_pos);
@@ -332,10 +367,13 @@ static inline float glt_normalized_loss(vec3 L_pred, vec3 L_target) {
 
 /* One SGD step on kernel colors toward target (gradient of Eq. 8, simplified):
    moves each contributing kernel's color along -lr * normalized residual.
-   denom uses (pred + 1) for stability; updates are clamped. */
+   denom uses (pred + 1) for stability; updates are clamped.
+   `pred` is the cache prediction at q (computed by the caller via
+   glt_eval_rgb) so the evaluation is not done twice per iteration.
+   When the Morton index is built, only the 27-cell neighborhood is
+   visited instead of scanning all kernels. */
 static inline void glt_train_step(glt_model *m, vec3 pos, vec3 dir, vec3 norm,
-                                  vec3 albedo, float roughness, vec3 target) {
-    vec3 pred = glt_eval_rgb(m, pos, dir, norm, albedo, roughness);
+                                  vec3 albedo, float roughness, vec3 target, vec3 pred) {
     vec3 denom = v3(pred.x + 1.0f, pred.y + 1.0f, pred.z + 1.0f);
     vec3 nres = v3((pred.x - target.x) / denom.x,
                    (pred.y - target.y) / denom.y,
@@ -345,17 +383,41 @@ static inline void glt_train_step(glt_model *m, vec3 pos, vec3 dir, vec3 norm,
     nres.y = fmaxf(-2.0f, fminf(2.0f, nres.y));
     nres.z = fmaxf(-2.0f, fminf(2.0f, nres.z));
     float lr = m->learning_rate;
+    if (m->index_built && m->count > 512) {
+        float fx = (pos.x - GLT_BBOX_MIN_X) / (GLT_BBOX_MAX_X - GLT_BBOX_MIN_X) * GLT_GRID_RES;
+        float fy = (pos.y - GLT_BBOX_MIN_Y) / (GLT_BBOX_MAX_Y - GLT_BBOX_MIN_Y) * GLT_GRID_RES;
+        float fz = (pos.z - GLT_BBOX_MIN_Z) / (GLT_BBOX_MAX_Z - GLT_BBOX_MIN_Z) * GLT_GRID_RES;
+        int cx = (int)fx, cy = (int)fy, cz = (int)fz;
+        if (cx < 0) cx = 0;
+        if (cx >= GLT_GRID_RES) cx = GLT_GRID_RES - 1;
+        if (cy < 0) cy = 0;
+        if (cy >= GLT_GRID_RES) cy = GLT_GRID_RES - 1;
+        if (cz < 0) cz = 0;
+        if (cz >= GLT_GRID_RES) cz = GLT_GRID_RES - 1;
+        for (int dx = -1; dx <= 1; dx++)
+        for (int dy = -1; dy <= 1; dy++)
+        for (int dz = -1; dz <= 1; dz++) {
+            int ax = cx + dx, ay = cy + dy, az = cz + dz;
+            if (ax < 0 || ay < 0 || az < 0 ||
+                ax >= GLT_GRID_RES || ay >= GLT_GRID_RES || az >= GLT_GRID_RES) continue;
+            int cell = (ax * GLT_GRID_RES + ay) * GLT_GRID_RES + az;
+            for (int k = m->cell_start[cell]; k < m->cell_start[cell + 1]; k++) {
+                glt_gaussian *g = &m->gaussians[m->sorted[k]];
+                float w = glt_kernel_weight(g, pos, dir, norm, albedo, roughness);
+                if (w <= 0.0f) continue;
+                g->color = vsub(g->color, vmul(nres, lr * w));
+                if (g->color.x < 0) g->color.x = 0;
+                if (g->color.y < 0) g->color.y = 0;
+                if (g->color.z < 0) g->color.z = 0;
+            }
+        }
+        return;
+    }
     for (int i = 0; i < m->count; i++) {
         glt_gaussian *g = &m->gaussians[i];
         if (!g->alive) continue;
-        float epos = gaussian_eval_3d(pos, g->mean_pos, g->scale_pos);
-        if (epos > 9.0f) continue;
-        float edir = gaussian_eval_3d(dir, g->mean_dir, g->scale_dir);
-        float enrm = gaussian_eval_3d(norm, g->mean_normal,
-            v3(g->scale_norm, g->scale_norm, g->scale_norm));
-        float exponent = -(epos + edir + enrm);
-        if (exponent < GLT_CULL_THRESHOLD) continue;
-        float w = expf(exponent);
+        float w = glt_kernel_weight(g, pos, dir, norm, albedo, roughness);
+        if (w <= 0.0f) continue;
         g->color = vsub(g->color, vmul(nres, lr * w));
         /* keep colors non-negative */
         if (g->color.x < 0) g->color.x = 0;

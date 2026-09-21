@@ -49,3 +49,20 @@
   editor/OS files. Untracked `logs/glt.log`.
 - Verified: `make clean && make` silent, 200×150/4spp cornell test renders
   avg ~80/255 (not black), 1.6 Mrays/s, keep rate 0.9%; 4× 800×600 PNGs valid.
+
+## 2026-09-21 — Phase 4: hot-loop optimization (SIMD + culled training)
+- `glt.h`: precomputed inv-sigma per kernel (refreshed on spawn/split) —
+  eliminates 7 `expf` calls per gaussian per query; single shared
+  `glt_kernel_weight` helper used by eval AND training (also fixes train
+  step omitting the albedo/roughness terms).
+- Explicit SSE2 fast path for the 3D squared-distance factor
+  (`_mm_sub/mul` + 3-lane horizontal sum, scalar fallback otherwise).
+- `glt_train_step` now takes the caller's `pred` (no double eval) and
+  visits only the 27-cell Morton neighborhood when the index is built
+  instead of scanning all 65K slots: 1500-iter training takes <0.2 s.
+- Removed dead counting pass in `glt_build_index` (single scan fill).
+- Fixed stack overflow from the enlarged model (~9.5 MB vs 8 MB stack):
+  `glt_model` is now `static` in `main.c`.
+- Measured (800×600, 16 spp, 1500 train): 22–27 s/render, 1.9–2.5 Mrays/s
+  (~1.6× vs scalar baseline), keep rate 0.0–0.1%, screenshots re-rendered
+  with identical brightness (cornell 98/89/75, dining 207/185/161, …).

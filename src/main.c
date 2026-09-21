@@ -248,7 +248,7 @@ int main(int argc, char **argv) {
     scene sc = E->fn();
     camera cam = cam_new(E->eye, E->look, v3(0, 1, 0), E->fov, (float)W / H);
     image img = img_new(W, H);
-    glt_model m;
+    static glt_model m; /* ~9.5 MB: static, not stack (8 MB limit) */
     glt_init(&m);
 
     g_seed = (unsigned int)time(NULL) ^ 0x9E3779B9u;
@@ -275,6 +275,9 @@ int main(int argc, char **argv) {
 
     /* ---- Phase B: residual minimization (Eq. 1 + Eq. 8) ---- */
     double train_loss = 0;
+#ifdef _OPENMP
+    double train_t0 = omp_get_wtime();
+#endif
     {
         unsigned int rng = g_seed ^ 0xABCDEF01u;
         int report = train_iters / 4; if (report < 1) report = 1;
@@ -289,15 +292,21 @@ int main(int argc, char **argv) {
             vec3 wo = vmul(r.d, -1.0f);
             vec3 pred = glt_eval_rgb(&m, rec.point, wo, rec.normal, rec.albedo, rec.roughness);
             train_loss += glt_normalized_loss(pred, target);
-            glt_train_step(&m, rec.point, wo, rec.normal, rec.albedo, rec.roughness, target);
+            glt_train_step(&m, rec.point, wo, rec.normal, rec.albedo, rec.roughness, target, pred);
             glt_adapt(&m, it, rec.point, wo, rec.normal, rec.albedo, rec.roughness, target, &rng);
             if ((it + 1) % report == 0)
                 fprintf(stderr, "[GLT] iter %d/%d loss=%.4f alive=%d\n",
                         it + 1, train_iters, train_loss / (it + 1), glt_alive_count(&m));
         }
         glt_build_index(&m);
+#ifdef _OPENMP
+        fprintf(stderr, "[GLT] train done: loss=%.4f alive=%d total=%d (%.2fs)\n",
+                train_iters > 0 ? train_loss / train_iters : 0, glt_alive_count(&m), m.count,
+                omp_get_wtime() - train_t0);
+#else
         fprintf(stderr, "[GLT] train done: loss=%.4f alive=%d total=%d\n",
                 train_iters > 0 ? train_loss / train_iters : 0, glt_alive_count(&m), m.count);
+#endif
     }
 
     /* ---- Phase C: render ---- */

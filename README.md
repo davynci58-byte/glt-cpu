@@ -35,7 +35,8 @@ convert screenshots/cornell.ppm screenshots/cornell.png
 - `src/ray.h` — ray-primitive intersection (spheres, planes)
 - `src/glt.h` — Gaussian Light Transport core: 13D Gaussian mixture (Eq. 4),
   Morton-code tile culling (Sec. 3.1), residual minimization (Eq. 1),
-  normalized loss (Eq. 8), split/spawn/prune adaptation
+  normalized loss (Eq. 8), split/spawn/prune adaptation; precomputed
+  inv-sigma, SSE2 vectorized 3D factors, index-culled SGD training step
 - `src/camera.h` — pinhole camera model
 - `src/image.h` — PPM image output
 - `src/main.c` — path tracer (NEE + cosine-weighted bounces, Russian roulette),
@@ -109,13 +110,17 @@ for iter in 1..N:
 
 | Scene | Avg RGB | Render time | Mrays/s | Gaussians alive | Cache keep rate |
 |---|---|---|---|---|---|
-| cornell | 98 / 89 / 75 | ~36 s | ~1.56 | ~3050 | ~0.1% |
-| bedroom | 126 / 96 / 74 | ~41 s | ~1.36 | ~3050 | ~0.1% |
-| dining | 207 / 185 / 161 | ~38 s | ~1.37 | ~2980 | ~0.0% |
-| staircase | 134 / 134 / 150 | ~34 s | ~1.58 | ~2960 | ~0.0% |
+| cornell | 98 / 89 / 75 | ~22.5 s | ~2.51 | ~3050 | ~0.1% |
+| bedroom | 126 / 96 / 74 | ~24.1 s | ~2.33 | ~3050 | ~0.1% |
+| dining | 207 / 185 / 161 | ~27.2 s | ~1.93 | ~2970 | ~0.0% |
+| staircase | 134 / 134 / 150 | ~22.5 s | ~2.42 | ~2970 | ~0.0% |
 
 The Morton grid index (16³ cells, 27-cell neighborhood) culls >99% of kernels
 per query — matching the paper's ~76-of-22K evaluation ratio regime.
+Training (1500 iters) takes <0.2 s thanks to the index-culled SGD step;
+rendering is ~1.6× faster than the scalar baseline via precomputed
+inv-sigma (no `expf` per query in the hot loop) and SSE2-vectorized
+3D Gaussian factors (`-march=native`, OpenMP row-parallel).
 
 ![Cornell box](screenshots/cornell.png)
 ![Bedroom](screenshots/bedroom.png)
