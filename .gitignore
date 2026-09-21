@@ -11,6 +11,9 @@ output.ppm
 output.png
 test.ppm
 
+# PPM masters: PNGs are the tracked screenshots (PPMs stay local, ~1.4MB each)
+screenshots/*.ppm
+
 # Agent loop logs (appended on every run, not part of the project)
 logs/
 

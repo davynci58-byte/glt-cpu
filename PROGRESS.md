@@ -77,3 +77,10 @@
 - Measured (800×600, 16 spp, 1500 train): 22–27 s/render, 1.9–2.5 Mrays/s
   (~1.6× vs scalar baseline), keep rate 0.0–0.1%, screenshots re-rendered
   with identical brightness (cornell 98/89/75, dining 207/185/161, …).
+
+## 2026-09-21 — Release hygiene: untrack PPM masters
+- `screenshots/*.ppm` were tracked in git (~5.6 MB duplicating the PNGs):
+  `git rm --cached` + `screenshots/*.ppm` in `.gitignore`; PNGs stay
+  tracked, PPMs stay on local disk for `convert` regeneration.
+- Verified: `make clean && make` warning-free, 200×150/4spp cornell test
+  avg ~81/255 (not black), 2.0 Mrays/s, keep 0.2%.
