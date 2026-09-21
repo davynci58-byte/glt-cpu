@@ -178,3 +178,12 @@
   (22 files: no binary/PPM/logs/loop.sh); working tree clean,
   `origin/master` in sync; 4× 800×600 PNGs valid.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-21e).
+
+## 2026-09-21 — Re-verification (no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  avg 90.8/81.8/68.2 (not black), 3.11 Mrays/s, keep 0.8%.
+- README checklist all PASS (emoji title, 4× screenshots, build/run,
+  3× pseudocode blocks, benchmarks, license); tracked files clean
+  (20 files: no binary/PPM/logs/loop.sh); working tree clean,
+  `origin/master` in sync; 4× 800×600 PNGs valid; tags v1.0-glt…v1.4-verify.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-21f).
