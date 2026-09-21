@@ -109,3 +109,14 @@
 - Avg RGB matches README results table exactly (cornell 98/89/75, bedroom
   126/96/74, dining 207/185/161, staircase 134/134/150); no code or README
   changes needed.
+
+## 2026-09-21 — Final verification (all phases complete)
+- `make clean && make` warning-free; smoke test 200×150/4spp/train200:
+  avg 91.0/81.5/68.2 (not black), 3.08 Mrays/s, keep 0.8%.
+- All AGENT.md phases confirmed done: path tracer, GLT core (Eq. 4/8,
+  Morton culling, split/spawn/prune), 4 scenes, 800×600 PNG screenshots,
+  OpenMP + SSE2 optimization with perf logging, README (emoji title,
+  pseudocode, benchmarks, license), `.gitignore`, MIT `LICENSE`.
+- 4× 800×600 PNGs valid (`file`: 800×600 RGB), tracked in git; PPM
+  masters local-only (gitignored). Tags `v1.0-glt`…`v1.4-verify` pushed;
+  `origin/master` up to date. No code changes needed.
