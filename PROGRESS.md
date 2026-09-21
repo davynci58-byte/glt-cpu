@@ -159,3 +159,13 @@
   tags v1.0-glt…v1.4-verify present; working tree clean, `origin/master`
   up to date; 4× 800×600 PNGs valid.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-21c).
+
+## 2026-09-21 — Re-verification (no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  avg 90.9/82.1/68.5 (not black), 3.18 Mrays/s, keep 0.8%.
+- README checklist all PASS (emoji title, 4× screenshots, build/run,
+  3× pseudocode blocks, benchmarks, license); tracked files clean
+  (22 files: no binary/PPM/logs/loop.sh); tags v1.0-glt…v1.4-verify
+  present; working tree clean, `origin/master` in sync (0 ahead/behind);
+  4× 800×600 PNGs valid.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-21d).
