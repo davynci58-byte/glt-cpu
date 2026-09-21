@@ -1,7 +1,0 @@
-=== run Sun Sep 20 10:04:36 PM EDT 2026 ===
-Tackling the next unfinished task — reading the brief and getting oriented.
-Build is broken — fixing the compilation errors first.
-The header got corrupted — rewriting it cleanly.
-Basic render works — now building out the full system.
-Render confirmed too dark — rewriting the core with proper lighting and the full Gaussian cache.
-Cache core done — now wiring up scenes, training loop, and parallel rendering.

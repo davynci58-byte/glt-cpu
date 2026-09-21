@@ -1,4 +1,21 @@
+# Binaries and build artifacts
 glt
-output.ppm
 *.o
 *.exe
+*.out
+*.d
+
+# Local test renders (keep curated screenshots/ in git)
+/tmp/
+output.ppm
+output.png
+test.ppm
+
+# Agent loop logs (appended on every run, not part of the project)
+logs/
+
+# Editor / OS noise
+.vscode/
+.idea/
+*~
+.DS_Store

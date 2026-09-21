@@ -86,9 +86,12 @@ static inline unsigned int glt_morton_of(vec3 p) {
     float fx = (p.x - GLT_BBOX_MIN_X) / (GLT_BBOX_MAX_X - GLT_BBOX_MIN_X);
     float fy = (p.y - GLT_BBOX_MIN_Y) / (GLT_BBOX_MAX_Y - GLT_BBOX_MIN_Y);
     float fz = (p.z - GLT_BBOX_MIN_Z) / (GLT_BBOX_MAX_Z - GLT_BBOX_MIN_Z);
-    if (fx < 0) fx = 0; if (fx > 1) fx = 1;
-    if (fy < 0) fy = 0; if (fy > 1) fy = 1;
-    if (fz < 0) fz = 0; if (fz > 1) fz = 1;
+    if (fx < 0) fx = 0;
+    if (fx > 1) fx = 1;
+    if (fy < 0) fy = 0;
+    if (fy > 1) fy = 1;
+    if (fz < 0) fz = 0;
+    if (fz > 1) fz = 1;
     unsigned int ix = (unsigned int)(fx * 1023.0f);
     unsigned int iy = (unsigned int)(fy * 1023.0f);
     unsigned int iz = (unsigned int)(fz * 1023.0f);
@@ -128,7 +131,8 @@ static inline void glt_build_index(glt_model *m) {
     /* count per cell */
     for (int i = 0; i < n; i++) {
         int c = glt_cell_of_morton(m->gaussians[m->sorted[i]].morton);
-        if (c < 0) c = 0; if (c >= ncells) c = ncells - 1;
+        if (c < 0) c = 0;
+        if (c >= ncells) c = ncells - 1;
         m->cell_start[c + 1]++;
     }
     for (int i = 0; i < ncells; i++) m->cell_start[i + 1] += m->cell_start[i];
@@ -141,7 +145,8 @@ static inline void glt_build_index(glt_model *m) {
     for (int i = 0; i <= ncells; i++) tmp_start[i] = -1;
     for (int i = 0; i < n; i++) {
         int c = glt_cell_of_morton(m->gaussians[m->sorted[i]].morton);
-        if (c < 0) c = 0; if (c >= ncells) c = ncells - 1;
+        if (c < 0) c = 0;
+        if (c >= ncells) c = ncells - 1;
         if (c != cur) { cur = c; start = i; tmp_start[c] = start; }
     }
     /* fill gaps: cell_start[c] = first index with cell >= c */
@@ -164,9 +169,12 @@ static inline vec3 glt_eval_rgb(glt_model *m, vec3 pos, vec3 dir, vec3 norm,
         float fy = (pos.y - GLT_BBOX_MIN_Y) / (GLT_BBOX_MAX_Y - GLT_BBOX_MIN_Y) * GLT_GRID_RES;
         float fz = (pos.z - GLT_BBOX_MIN_Z) / (GLT_BBOX_MAX_Z - GLT_BBOX_MIN_Z) * GLT_GRID_RES;
         int cx = (int)fx, cy = (int)fy, cz = (int)fz;
-        if (cx < 0) cx = 0; if (cx >= GLT_GRID_RES) cx = GLT_GRID_RES - 1;
-        if (cy < 0) cy = 0; if (cy >= GLT_GRID_RES) cy = GLT_GRID_RES - 1;
-        if (cz < 0) cz = 0; if (cz >= GLT_GRID_RES) cz = GLT_GRID_RES - 1;
+        if (cx < 0) cx = 0;
+        if (cx >= GLT_GRID_RES) cx = GLT_GRID_RES - 1;
+        if (cy < 0) cy = 0;
+        if (cy >= GLT_GRID_RES) cy = GLT_GRID_RES - 1;
+        if (cz < 0) cz = 0;
+        if (cz >= GLT_GRID_RES) cz = GLT_GRID_RES - 1;
         int visited = 0;
         for (int dx = -1; dx <= 1; dx++)
         for (int dy = -1; dy <= 1; dy++)

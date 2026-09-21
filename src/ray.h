@@ -1,5 +1,12 @@
 #ifndef RAY_H
 #define RAY_H
+/*
+ * ray.h — rays, primitives (spheres, planes), and scene intersection.
+ *
+ * A `scene` is a flat list of spheres + planes with diffuse albedo,
+ * roughness, and optional emissive emission. `intersect_scene` returns
+ * the closest hit (position, shading normal, albedo, emission flag).
+ */
 
 #include "vec.h"
 
@@ -50,6 +57,7 @@ static inline ray ray_new(vec3 o, vec3 d) {
     return (ray){o, vnorm(d), 1e30f};
 }
 
+/** Intersect a ray with a sphere; fills `rec` and returns 1 on hit. */
 static inline int intersect_sphere(ray r, sphere s, hit_record *rec) {
     vec3 oc = vsub(r.o, s.center);
     float b = vdot(oc, r.d);
@@ -69,6 +77,7 @@ static inline int intersect_sphere(ray r, sphere s, hit_record *rec) {
     return 1;
 }
 
+/** Intersect a ray with a plane; fills `rec` and returns 1 on hit. */
 static inline int intersect_plane(ray r, plane p, hit_record *rec) {
     float denom = vdot(p.normal, r.d);
     if (fabsf(denom) < 1e-6f) return 0;
@@ -85,6 +94,7 @@ static inline int intersect_plane(ray r, plane p, hit_record *rec) {
     return 1;
 }
 
+/** Intersect a ray with all scene primitives; keeps the closest hit. */
 static inline int intersect_scene(ray r, const scene *sc, hit_record *rec) {
     rec->hit = 0;
     rec->t = r.tmax;

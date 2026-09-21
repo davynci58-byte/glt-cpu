@@ -1,4 +1,4 @@
-# Gaussian Light Transport — CPU Ray Tracer
+# ✨ Gaussian Light Transport — CPU Ray Tracer
 
 A super-fast CPU ray tracer inspired by [Gaussian Light Transport](https://arxiv.org/abs/2609.11430) (SIGGRAPH Asia 2026).
 
@@ -50,6 +50,60 @@ convert screenshots/cornell.ppm screenshots/cornell.png
 - Separable covariance (product of lower-dimensional Gaussians)
 - Splitting (every 400 iters), spawning (500 every 500 iters), pruning (every 2000 iters)
 - Normalized loss (Eq. 8) with stabilized `(pred + 1)` denominator
+
+### Pseudocode: separable Gaussian evaluation (Eq. 4)
+
+```text
+function gaussian_weight(g, q):   # q = (pos, dir, normal, albedo, rough)
+    e = 0
+    e += ||(q.pos    - g.pos)    / exp(g.scale_pos)||^2
+    e += ||(q.dir    - g.dir)    / exp(g.scale_dir)||^2
+    e += ||(q.normal - g.normal) / exp(g.scale_norm)||^2
+    e += ||(q.albedo - g.albedo)||^2                  # unit scale
+    e += ((q.rough - g.rough) / exp(g.scale_rough))^2
+    if e > CULL_THRESHOLD: return 0                   # culled
+    return exp(-e)
+
+function eval_cache(model, q):
+    L = 0
+    for g in culled_candidates(model, q.pos):         # 27-cell lookup below
+        L += g.color * gaussian_weight(g, q)
+    return L
+```
+
+### Pseudocode: tile-based Morton culling (Sec. 3.1)
+
+```text
+function build_index(model):                          # every 250 iters
+    for g in alive(model): g.morton = morton3(g.pos)  # 30-bit interleave
+    sort alive gaussians by morton
+    cell_of(m) = top 4 bits per axis -> 16^3 grid cell
+    record per-cell index ranges
+
+function culled_candidates(model, pos):
+    c = grid_cell(pos)                                # quantize to 16^3
+    for each of 27 neighbor cells of c:
+        for g in cell_range(cell):
+            if ||pos - g.pos|| scaled dist > 3 sigma: skip   # cheap pre-cull
+            else: yield g                         # full 13D eval (~0.1-1% kept)
+```
+
+### Pseudocode: residual minimization loop (Eq. 1 + Eq. 8)
+
+```text
+seed 2048 gaussians on visible surface points
+for iter in 1..N:
+    sample camera ray -> surface point q, normal, albedo
+    target = pathtrace(q)             # E + T·L unbiased estimate
+    pred   = eval_cache(model, q)
+    loss  += ||(pred - target) / (pred + eps)||^2     # Eq. 8, normalized
+    sgd_step(model, q, target):                       # Eq. 1 gradient
+        for g near q: g.color -= lr * w(g,q) * clamp((pred-target)/(pred+1))
+    if iter % 400 == 0:  split(highest_importance_kernel)
+    if iter % 500 == 0:  spawn(500 jittered kernels around q)
+    if iter % 2000 == 0: prune(importance < 1e-5)
+    if iter % 250 == 0:  build_index(model)
+```
 
 ## Results (800×600, 16 spp, 1500 train iters, 1 CPU core)
 

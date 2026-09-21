@@ -1,5 +1,11 @@
 #ifndef CAMERA_H
 #define CAMERA_H
+/*
+ * camera.h — pinhole camera.
+ *
+ * `cam_new` builds an orthonormal basis from eye/look-at/up, field of
+ * view, and aspect ratio; `cam_ray` maps normalized UVs to a world ray.
+ */
 
 #include "vec.h"
 #include "ray.h"

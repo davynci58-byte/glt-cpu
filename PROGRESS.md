@@ -37,3 +37,15 @@
   PPM + PNG (via `convert`) in `screenshots/`.
 - Updated README (build/run/results table), scene descriptors, this log.
 - Committed, pushed to `origin/master`, tagged `v1.0-glt`.
+
+## 2026-09-21 — Polish: warning-free build, docs, gitignore
+- Fixed all `-Wmisleading-indentation` warnings (`make` now silent);
+  split one-line `if` chains onto separate lines in `glt.h`/`main.c`.
+- README: emoji title, pseudocode blocks for Gaussian eval, Morton
+  culling, and residual-minimization loop (presentation-rules compliant).
+- Added file-purpose headers (`vec/ray/camera/image/main`) + doc comments
+  on intersect, sampling, and pathtrace functions.
+- `.gitignore`: build artifacts, local test renders, `logs/` (loop noise),
+  editor/OS files. Untracked `logs/glt.log`.
+- Verified: `make clean && make` silent, 200×150/4spp cornell test renders
+  avg ~80/255 (not black), 1.6 Mrays/s, keep rate 0.9%; 4× 800×600 PNGs valid.

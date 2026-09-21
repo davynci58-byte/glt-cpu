@@ -1,5 +1,12 @@
 #ifndef VEC_H
 #define VEC_H
+/*
+ * vec.h — minimal single-precision 3D vector math.
+ *
+ * Plain-old-data `vec3` plus inline add/sub/mul/dot/cross/normalize
+ * helpers used by the path tracer, camera, and Gaussian cache.
+ * All functions are `static inline` so the header is self-contained.
+ */
 
 #include <math.h>
 

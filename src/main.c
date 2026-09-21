@@ -1,3 +1,11 @@
+/*
+ * main.c — glt ray tracer entry point.
+ *
+ * Phase A seeds the Gaussian light cache from visible surface points,
+ * Phase B trains it with residual minimization (Eq. 1 + Eq. 8), and
+ * Phase C renders with a cosine-weighted path tracer (NEE direct +
+ * cached/indirect bounces, Russian roulette) under OpenMP row parallelism.
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,7 +34,7 @@ static inline float randf_s(unsigned int *s) {
     return (float)(xorshift(s) & 0x00FFFFFF) / (float)0x01000000;
 }
 
-/* Cosine-weighted hemisphere sample */
+/* Cosine-weighted hemisphere sample around `normal` using RNG `s`. */
 static vec3 cosine_hemisphere_s(vec3 normal, unsigned int *s) {
     float r1 = randf_s(s) * 2.0f * PI;
     float r2 = randf_s(s);
@@ -42,7 +50,8 @@ static long g_rays = 0; /* atomic via omp */
 
 static vec3 pathtrace(ray r, const scene *s, glt_model *m, unsigned int *rng, int depth);
 
-/* Path trace with direct (NEE) + indirect; GLT cache guides deep bounces */
+/* Path trace with direct (NEE) + indirect; GLT cache guides deep bounces.
+ * Returns linear HDR radiance; `depth` caps recursion (RR after depth 3). */
 static vec3 pathtrace(ray r, const scene *s, glt_model *m, unsigned int *rng, int depth) {
     if (depth > 8) return v3(0, 0, 0);
 #ifdef _OPENMP
@@ -230,7 +239,8 @@ int main(int argc, char **argv) {
         }
     }
     if (spp < 1) spp = 1;
-    if (W < 8) W = 8; if (H < 8) H = 8;
+    if (W < 8) W = 8;
+    if (H < 8) H = 8;
 
     scene_entry *E = &SCENES[0];
     for (scene_entry *e = SCENES; e->name; e++)

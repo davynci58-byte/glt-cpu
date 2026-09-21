@@ -1,5 +1,11 @@
 #ifndef IMAGE_H
 #define IMAGE_H
+/*
+ * image.h — floating-point image buffer with PPM (P6) output.
+ *
+ * Linear HDR values are stored per pixel; `img_write_ppm` applies a
+ * sqrt (gamma ~2.0) tone map and clamps to 8-bit RGB.
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
