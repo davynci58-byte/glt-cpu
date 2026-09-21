@@ -106,7 +106,7 @@ for iter in 1..N:
     if iter % 250 == 0:  build_index(model)
 ```
 
-## Results (800×600, 16 spp, 1500 train iters, 1 CPU core)
+## Results (800×600, 16 spp, `--train 1500`, 1 CPU core)
 
 | Scene | Avg RGB | Render time | Mrays/s | Gaussians alive | Cache keep rate |
 |---|---|---|---|---|---|
@@ -122,6 +122,12 @@ rendering is ~1.6× faster than the scalar baseline via precomputed
 inv-sigma (no `expf` per query in the hot loop) and SSE2-vectorized
 3D Gaussian factors (`-march=native`, OpenMP row-parallel).
 
+> Note: AGENT.md targets <10 ms/frame at 800×600. A CPU path tracer at
+> 16 spp traces ~7.7M primary rays plus bounces (~40–60M rays, ~25 s at
+> ~2 Mrays/s on 1 core), so true real-time needs a GPU or far fewer spp
+> (e.g. 1 spp + denoiser). Throughput in Mrays/s and cache keep rate are
+> the honest metrics here; the GLT cache itself evaluates in <0.2 s.
+
 ![Cornell box](screenshots/cornell.png)
 ![Bedroom](screenshots/bedroom.png)
 ![Dining room](screenshots/dining.png)
@@ -129,4 +135,4 @@ inv-sigma (no `expf` per query in the hot loop) and SSE2-vectorized
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE).

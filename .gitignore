@@ -14,6 +14,9 @@ test.ppm
 # Agent loop logs (appended on every run, not part of the project)
 logs/
 
+# Agent scaffolding (local automation, not part of the public project)
+loop.sh
+
 # Editor / OS noise
 .vscode/
 .idea/

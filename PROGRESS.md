@@ -50,6 +50,17 @@
 - Verified: `make clean && make` silent, 200×150/4spp cornell test renders
   avg ~80/255 (not black), 1.6 Mrays/s, keep rate 0.9%; 4× 800×600 PNGs valid.
 
+## 2026-09-21 — Polish: LICENSE, README honesty, repo hygiene
+- Added MIT `LICENSE` (README already claimed MIT but no file existed).
+- README: results header now shows the exact `--train 1500` flag
+  (code default is 2000), license links to `LICENSE`, added honest note
+  that <10ms/frame at 800×600/16spp is out of reach for a CPU path
+  tracer (~40–60M rays/render) — Mrays/s + keep rate are the real metrics.
+- Untracked `loop.sh` agent scaffolding from the public repo
+  (`git rm --cached`, added to `.gitignore`; kept on local disk).
+- Verified: `make clean && make` warning-free, 200×150/4spp cornell test
+  avg ~91/82/68 (not black), 2.1 Mrays/s, keep 0.4%; 4× 800×600 PNGs valid.
+
 ## 2026-09-21 — Phase 4: hot-loop optimization (SIMD + culled training)
 - `glt.h`: precomputed inv-sigma per kernel (refreshed on spawn/split) —
   eliminates 7 `expf` calls per gaussian per query; single shared
