@@ -120,3 +120,12 @@
 - 4× 800×600 PNGs valid (`file`: 800×600 RGB), tracked in git; PPM
   masters local-only (gitignored). Tags `v1.0-glt`…`v1.4-verify` pushed;
   `origin/master` up to date. No code changes needed.
+
+## 2026-09-21 — Re-verification (no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  avg 91.2/82.2/68.7 (not black), 3.15 Mrays/s, keep 0.8%.
+- Repo hygiene confirmed: 4× 800×600 PNGs valid (`file`: 800×600 RGB),
+  tracked in git; README has emoji title, description, build/run, 3×
+  pseudocode blocks, results table, license; MIT `LICENSE` + `.gitignore`
+  present; working tree clean, `origin/master` up to date.
+- All AGENT.md phases remain complete. No code changes needed.
