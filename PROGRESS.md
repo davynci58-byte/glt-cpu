@@ -84,3 +84,11 @@
   tracked, PPMs stay on local disk for `convert` regeneration.
 - Verified: `make clean && make` warning-free, 200×150/4spp cornell test
   avg ~81/255 (not black), 2.0 Mrays/s, keep 0.2%.
+
+## 2026-09-21 — Verify + refresh screenshots (800×600, 16 spp, train 1500)
+- `make clean && make` warning-free; smoke test 200×150/4spp/train200:
+  avg 90.9/82.1/68.4 (not black), 3.10 Mrays/s, keep 0.8%.
+- Re-rendered all 4 scenes with current binary: cornell 21.4s/2.64 Mrays/s/
+  keep 0.1% (3051 alive), bedroom 21.4s/2.63, dining 27.2s/1.93,
+  staircase 20.9s/2.61; `convert`ed PPM→PNG, all PNG headers valid.
+- Matches README results table; no code changes needed.
