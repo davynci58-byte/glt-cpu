@@ -92,3 +92,9 @@
   keep 0.1% (3051 alive), bedroom 21.4s/2.63, dining 27.2s/1.93,
   staircase 20.9s/2.61; `convert`ed PPM→PNG, all PNG headers valid.
 - Matches README results table; no code changes needed.
+
+## 2026-09-21 — Tag verified release
+- `make clean && make` warning-free; smoke test 200×150/4spp/train200:
+  avg 91.2/81.9/68.4 (not black), 2.88 Mrays/s, keep 0.8%.
+- 4× 800×600 PNGs re-validated (`file`: 800×600 RGB); working tree clean,
+  `origin/master` up to date; tagged `v1.4-verify` and pushed tags.
