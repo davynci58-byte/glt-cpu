@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -O3 -march=native -Wall -Wextra -std=c11 -Isrc
-LDFLAGS = -lm
+CFLAGS = -O3 -march=native -Wall -Wextra -std=c11 -Isrc -fopenmp
+LDFLAGS = -lm -fopenmp
 SRC = src/main.c
 OUT = glt
 

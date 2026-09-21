@@ -1,0 +1,8 @@
+# dining
+# Gaussian Light Transport scene descriptor (built into ./glt).
+# Usage: ./glt scenes/dining.glt  ==  ./glt --scene dining --out screenshots/dining.ppm
+scene=dining
+width=800
+height=600
+spp=16
+train=1500

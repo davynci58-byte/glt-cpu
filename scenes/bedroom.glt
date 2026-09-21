@@ -1,0 +1,8 @@
+# bedroom
+# Gaussian Light Transport scene descriptor (built into ./glt).
+# Usage: ./glt scenes/bedroom.glt  ==  ./glt --scene bedroom --out screenshots/bedroom.ppm
+scene=bedroom
+width=800
+height=600
+spp=16
+train=1500

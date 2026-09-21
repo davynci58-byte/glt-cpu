@@ -1,0 +1,8 @@
+# cornell
+# Gaussian Light Transport scene descriptor (built into ./glt).
+# Usage: ./glt scenes/cornell.glt  ==  ./glt --scene cornell --out screenshots/cornell.ppm
+scene=cornell
+width=800
+height=600
+spp=16
+train=1500

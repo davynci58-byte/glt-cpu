@@ -323,14 +323,19 @@ static inline float glt_normalized_loss(vec3 L_pred, vec3 L_target) {
 }
 
 /* One SGD step on kernel colors toward target (gradient of Eq. 8, simplified):
-   moves each contributing kernel's color along -lr * normalized residual. */
+   moves each contributing kernel's color along -lr * normalized residual.
+   denom uses (pred + 1) for stability; updates are clamped. */
 static inline void glt_train_step(glt_model *m, vec3 pos, vec3 dir, vec3 norm,
                                   vec3 albedo, float roughness, vec3 target) {
     vec3 pred = glt_eval_rgb(m, pos, dir, norm, albedo, roughness);
-    vec3 denom = v3(pred.x + GLT_EPS, pred.y + GLT_EPS, pred.z + GLT_EPS);
+    vec3 denom = v3(pred.x + 1.0f, pred.y + 1.0f, pred.z + 1.0f);
     vec3 nres = v3((pred.x - target.x) / denom.x,
                    (pred.y - target.y) / denom.y,
                    (pred.z - target.z) / denom.z);
+    /* clamp normalized residual to avoid spikes when pred ~ 0 */
+    nres.x = fmaxf(-2.0f, fminf(2.0f, nres.x));
+    nres.y = fmaxf(-2.0f, fminf(2.0f, nres.y));
+    nres.z = fmaxf(-2.0f, fminf(2.0f, nres.z));
     float lr = m->learning_rate;
     for (int i = 0; i < m->count; i++) {
         glt_gaussian *g = &m->gaussians[i];

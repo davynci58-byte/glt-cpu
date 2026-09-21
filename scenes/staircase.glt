@@ -1,0 +1,8 @@
+# staircase
+# Gaussian Light Transport scene descriptor (built into ./glt).
+# Usage: ./glt scenes/staircase.glt  ==  ./glt --scene staircase --out screenshots/staircase.ppm
+scene=staircase
+width=800
+height=600
+spp=16
+train=1500
