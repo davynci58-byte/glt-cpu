@@ -205,3 +205,13 @@
   warning-free, smoke test 200×150/4spp/train200 prints `0.010 ms/pixel`,
   avg 91.2/82.2/68.6 (not black), 3.05 Mrays/s, keep 0.8%.
 - Rendering math untouched (log string only), so 800×600 screenshots stand.
+
+## 2026-09-22 — Final verification (all phases complete, v1.5)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  avg 91.2/82.1/68.6 (not black), 0.016 ms/pixel (unit fix confirmed),
+  1.81 Mrays/s, keep 0.7%.
+- README checklist all PASS (emoji title, 4× screenshots, build/run,
+  3× pseudocode blocks, benchmarks, license); 4× 800×600 PNGs valid;
+  tracked files clean (no binary/PPM/logs/loop.sh); working tree clean,
+  `origin/master` in sync.
+- All AGENT.md phases remain complete. No code changes needed.
