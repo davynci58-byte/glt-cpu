@@ -375,3 +375,14 @@
   in sync (0 ahead/behind); tags v1.0-glt…v1.5-verify present;
   zero TODO/FIXME in src/.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-22n).
+
+## 2026-09-22 — Re-verification (no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  loss 1.16 (stable, pred+1 denom), avg 91.2/82.0/68.5 (not black),
+  0.010 ms/pixel, 3.10 Mrays/s, keep 0.9%.
+- README checklist all PASS (emoji title, 4× screenshots, build/run,
+  3× pseudocode blocks, benchmarks, license); 4× 800×600 PNGs valid
+  (`file`: 800×600 RGB), tracked in git; 20 tracked files clean
+  (no binary/PPM/logs/loop.sh); working tree clean, `origin/master`
+  in sync (0 ahead/behind); tags v1.0-glt…v1.5-verify present.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-22o).
