@@ -386,3 +386,15 @@
   (no binary/PPM/logs/loop.sh); working tree clean, `origin/master`
   in sync (0 ahead/behind); tags v1.0-glt…v1.5-verify present.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-22o).
+
+## 2026-09-22 — Re-verification (no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  loss 1.10 (stable, pred+1 denom), avg 90.7/81.8/68.3 (not black),
+  0.016 ms/pixel, 1.83 Mrays/s, keep 0.8%.
+- No src changes since screenshots were rendered with the loss-fix binary
+  (8a56e0d); PPM masters re-measured: cornell 98/89/75, bedroom 126/96/74,
+  dining 207/185/161, staircase 134/134/150 — match README results table;
+  4× 800×600 PNGs valid, tracked in git; zero TODO/FIXME in src/.
+- Tracked files clean (20 files: no binary/PPM/logs/loop.sh); working tree
+  clean, `origin/master` in sync.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-22p).
