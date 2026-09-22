@@ -296,3 +296,15 @@
 - Tracked files clean (20 files: no binary/PPM/logs/loop.sh); working tree
   clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify present.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-22g).
+
+## 2026-09-22 — Final verification (all phases complete)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  loss 1.04 (stable, pred+1 denom), avg 90.9/82.1/68.6 (not black),
+  0.010 ms/pixel, 3.01 Mrays/s, keep 0.8%.
+- Screenshot PPM masters re-measured: cornell 98/89/75, bedroom 126/96/74,
+  dining 207/185/161, staircase 134/134/150 — match README results table;
+  4× 800×600 PNGs valid (`file`: 800×600 RGB), tracked in git.
+- No src changes since screenshots were rendered, so no re-render needed;
+  working tree clean, `origin/master` in sync (0 ahead/behind);
+  tags v1.0-glt…v1.5-verify present.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-22h).
