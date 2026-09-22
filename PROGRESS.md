@@ -250,3 +250,15 @@
   `convert`ed PPM→PNG, all PNG headers valid (800×600 RGB).
 - Avg RGB matches README results table exactly (cornell 98/89/75, bedroom
   126/96/74, dining 207/185/161, staircase 134/134/150).
+
+## 2026-09-22 — Re-verification (no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  loss 1.31 (stable, pred+1 denom), avg 90.9/81.6/68.1 (not black),
+  0.013 ms/pixel, 2.30 Mrays/s, keep 0.8%.
+- Screenshot PPM masters re-measured: bedroom 126/96/74, cornell 98/89/75,
+  dining 207/185/161, staircase 134/134/150 — match README results table;
+  4× 800×600 PNGs valid, tracked in git.
+- All headers have file-purpose comments + doc comments; scenes/*.glt
+  descriptors, LICENSE, .gitignore verified; working tree clean,
+  `origin/master` in sync.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-22d).
