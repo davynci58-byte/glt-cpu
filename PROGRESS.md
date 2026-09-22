@@ -196,3 +196,12 @@
   (20 files: no binary/PPM/logs/loop.sh); working tree clean,
   `origin/master` in sync; 4× 800×600 PNGs valid; tags v1.0-glt…v1.4-verify.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-21g).
+
+## 2026-09-22 — Fix perf-log unit bug (ms/pixel was 1000× off)
+- `src/main.c` Phase C log computed `elapsed * 1e3 / mpix * 1e3` but labeled
+  it `ms/pixel` — the extra `* 1e3` made it µs/pixel mislabeled (smoke test
+  printed `9.870 ms/pixel` for a 0.30 s / 30 kpx render; true value 0.010).
+- Fixed to `elapsed * 1e3 / mpix`; verified: `make clean && make`
+  warning-free, smoke test 200×150/4spp/train200 prints `0.010 ms/pixel`,
+  avg 91.2/82.2/68.6 (not black), 3.05 Mrays/s, keep 0.8%.
+- Rendering math untouched (log string only), so 800×600 screenshots stand.

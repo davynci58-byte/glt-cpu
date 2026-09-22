@@ -349,7 +349,7 @@ int main(int argc, char **argv) {
     (void)t0; (void)t1;
     double mpix = (double)W * H;
     fprintf(stderr, "\nDone in %.2fs wall (%.3f ms/pixel, %.2f Mrays/s)\n",
-            elapsed, elapsed * 1e3 / mpix * 1e3, (double)g_rays / elapsed / 1e6);
+            elapsed, elapsed * 1e3 / mpix, (double)g_rays / elapsed / 1e6);
     fprintf(stderr, "Gaussians: %d alive / %d total | evals: %ld kept %ld culled %ld (keep %.1f%%)\n",
             glt_alive_count(&m), m.count, m.eval_total, m.eval_kept, m.eval_culled,
             m.eval_total ? 100.0 * (double)m.eval_kept / (double)m.eval_total : 0.0);
