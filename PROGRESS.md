@@ -232,3 +232,21 @@
   3× pseudocode blocks, benchmarks, license); 4× 800×600 PNGs valid
   (`file`: 800×600 RGB); working tree clean, `origin/master` in sync.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-22c).
+
+## 2026-09-22 — Fix unstable training-loss metric (Eq. 8 reporting)
+- Smoke test showed `[GLT] train done: loss=211772` — the *reported* loss used
+  the raw paper denominator `(pred + 1e-3)` while the actual SGD step already
+  used stabilized `(pred + 1)`. Gradients were fine (renders bright), but the
+  logged loss diverged whenever pred started near 0, making logs meaningless.
+- Fixed `glt_normalized_loss` in `src/glt.h` to use `(pred + 1)`, matching
+  `glt_train_step` and the README ("stabilized (pred + 1) denominator").
+  Loss is diagnostic-only (not used by gradients), so rendering math untouched.
+- Verified: `make clean && make` warning-free; smoke test 200×150/4spp/train200:
+  loss 1.11 (was 211772), avg 91.1/81.9/68.5 (not black), 2.15 Mrays/s, keep 0.8%.
+  Full 1500-iter adaptation path: loss 1.01, 3051 alive / 3054 total.
+- Re-rendered all 4 scenes (800×600, 16 spp, train 1500) with current binary:
+  cornell 21.5s/2.63 Mrays/s/keep 0.1% (3051 alive), bedroom 23.4s/2.40,
+  dining 26.3s/2.00 (2976 alive), staircase 21.8s/2.49 (2985 alive);
+  `convert`ed PPM→PNG, all PNG headers valid (800×600 RGB).
+- Avg RGB matches README results table exactly (cornell 98/89/75, bedroom
+  126/96/74, dining 207/185/161, staircase 134/134/150).

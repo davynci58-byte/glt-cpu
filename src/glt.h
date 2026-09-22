@@ -356,11 +356,15 @@ static inline int glt_prune(glt_model *m, float threshold) {
     return killed;
 }
 
-/* Normalized residual loss (Eq. 8): || (L - E - T L) / (L + eps) ||^2.
-   L_pred: cache prediction, L_target = E + T*L estimate from path tracer. */
+/* Normalized residual loss (Eq. 8): || (L - E - T L) / (L + 1) ||^2.
+   L_pred: cache prediction, L_target = E + T*L estimate from path tracer.
+   NOTE: the paper writes (L + eps); we use (L + 1) — the same stabilized
+   denominator as glt_train_step — because pred starts near 0 and the raw
+   eps version explodes (loss 16 -> 200K+) making the log meaningless.
+   This function is diagnostic-only (gradients live in glt_train_step). */
 static inline float glt_normalized_loss(vec3 L_pred, vec3 L_target) {
     vec3 r = vsub(L_pred, L_target);
-    vec3 denom = v3(L_pred.x + GLT_EPS, L_pred.y + GLT_EPS, L_pred.z + GLT_EPS);
+    vec3 denom = v3(L_pred.x + 1.0f, L_pred.y + 1.0f, L_pred.z + 1.0f);
     vec3 n = v3(r.x / denom.x, r.y / denom.y, r.z / denom.z);
     return vdot(n, n);
 }
