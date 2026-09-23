@@ -444,3 +444,14 @@
   all headers have file-purpose + doc comments; LICENSE + .gitignore verified.
 - Working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify present.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-22t).
+
+## 2026-09-23 — Re-verification (no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  loss 1.82 (stable, pred+1 denom), avg 91.1/82.0/68.4 (not black),
+  0.015 ms/pixel, 1.94 Mrays/s, keep 0.7%.
+- README checklist all PASS (emoji title, 4× screenshots, build/run,
+  3× pseudocode blocks, benchmarks, license); 4× 800×600 PNGs valid
+  (`file`: 800×600 RGB), tracked in git; zero TODO/FIXME in src/;
+  LICENSE + .gitignore verified.
+- Working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify present.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-23).
