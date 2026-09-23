@@ -97,7 +97,7 @@ for iter in 1..N:
     sample camera ray -> surface point q, normal, albedo
     target = pathtrace(q)             # E + T·L unbiased estimate
     pred   = eval_cache(model, q)
-    loss  += ||(pred - target) / (pred + eps)||^2     # Eq. 8, normalized
+    loss  += ||(pred - target) / (pred + 1)||^2       # Eq. 8, normalized (stabilized: paper uses eps)
     sgd_step(model, q, target):                       # Eq. 1 gradient
         for g near q: g.color -= lr * w(g,q) * clamp((pred-target)/(pred+1))
     if iter % 400 == 0:  split(highest_importance_kernel)
