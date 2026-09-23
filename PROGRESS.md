@@ -554,3 +554,14 @@
   LICENSE + .gitignore + scenes/*.glt (4) verified; 20 tracked files clean.
 - Working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify present.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-23j).
+
+## 2026-09-23 — Re-verification (no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  loss 1.14 (stable, pred+1 denom), avg 90.9/82.2/68.5 (not black),
+  0.011 ms/pixel, 2.64 Mrays/s, keep 0.9%.
+- main.c confirmed: cache seeded (Phase A) → residual-trained (Phase B) →
+  queried on 1/8 of deep bounces (Phase C, MIS-rescaled); 4× 800×600 PNGs
+  valid, tracked in git; README/presentation checklist PASS; LICENSE +
+  .gitignore + scenes/*.glt (4) verified; 20 tracked files clean.
+- Working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify present.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-23k).
