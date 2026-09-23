@@ -587,3 +587,16 @@
   LICENSE + .gitignore + scenes/*.glt (4) verified; zero TODO/FIXME in src/.
 - Working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify present.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-23m).
+
+## 2026-09-23 — Re-verification (no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  loss 1.61 (stable, pred+1 denom), avg 91.3/82.1/68.5 (not black),
+  0.012 ms/pixel, 2.50 Mrays/s, keep 0.8%.
+- No src changes since screenshots rendered (8a56e0d ancestor of HEAD);
+  PPM masters re-measured: cornell 98/89/75, bedroom 126/96/74, dining
+  207/185/161, staircase 134/134/150 — match README results table;
+  4× 800×600 PNGs valid, tracked in git; `convert` (ImageMagick 7.1.1) present;
+  zero TODO/FIXME in src/; 20 tracked files clean.
+- Working tree clean, `origin/master` in sync (0 ahead/behind);
+  tags v1.0-glt…v1.5-verify present locally and on origin.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-23n).
