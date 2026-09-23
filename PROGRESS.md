@@ -667,3 +667,16 @@
   README embeds all 4 screenshots.
 - Working tree clean, `origin/master` in sync (a8a72dd).
 - All AGENT.md phases remain complete. No code changes needed (2026-09-23s).
+
+## 2026-09-23 — Re-verification (no changes required)
+- NOTE: plain `make` still fails with `fatal error: error writing to
+  /tmp/ccXXXX.s: No space left on device` — `/tmp` (987M tmpfs) remains
+  100% full from other tooling. Workaround:
+  `mkdir -p /root/tmpbuild && TMPDIR=/root/tmpbuild make`.
+- With workaround: `make clean && make` warning-free (exit 0); smoke test
+  200×150/4spp/train200: loss 1.09 (stable, pred+1 denom), avg 91.1/82.0/68.4
+  (not black), 0.009 ms/pixel, 3.19 Mrays/s, keep 0.8%.
+- 4× 800×600 PNGs valid (`file`: 800×600 RGB), tracked in git; 20 tracked
+  files clean (no binary/PPM/logs/loop.sh); tags v1.0-glt…v1.5-verify present;
+  README embeds all 4 screenshots; HEAD == origin/master (73416ae).
+- All AGENT.md phases remain complete. No code changes needed (2026-09-23t).
