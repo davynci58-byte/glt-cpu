@@ -612,3 +612,17 @@
 - Working tree clean, `origin/master` in sync (0 ahead/behind);
   tags v1.0-glt…v1.5-verify present.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-23o).
+
+## 2026-09-23 — Re-verification (no changes required)
+- NOTE: plain `make` fails here with `fatal error: error writing to
+  /tmp/ccXXXX.s: No space left on device` — `/tmp` (987M tmpfs) is full of
+  stale `.*.so` caches from other tooling, not this repo. Workaround:
+  `mkdir -p /root/tmpbuild && TMPDIR=/root/tmpbuild make` (gcc honors
+  TMPDIR for assembler temporaries). Do NOT delete other tools' /tmp files.
+- With workaround: `make clean && make` warning-free (exit 0); smoke test
+  200×150/4spp/train200: loss 1.08 (stable, pred+1 denom), avg 90.7/81.8/68.2
+  (not black), 0.010 ms/pixel, 2.90 Mrays/s, keep 0.8%.
+- No src/ changes since screenshots rendered (8a56e0d ancestor of HEAD),
+  so no re-render needed; 4× 800×600 PNGs valid; 20 tracked files clean;
+  HEAD == origin/master (681206a).
+- All AGENT.md phases remain complete. No code changes needed (2026-09-23p).
