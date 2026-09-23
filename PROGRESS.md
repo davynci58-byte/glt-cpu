@@ -532,3 +532,14 @@
   LICENSE + .gitignore verified; scenes/*.glt (4) present.
 - Working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify present.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-23h).
+
+## 2026-09-23 — Re-verification (no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  loss 1.10 (stable, pred+1 denom), avg 91.1/82.0/68.5 (not black),
+  0.013 ms/pixel, 2.19 Mrays/s, keep 0.8%.
+- Screenshots confirmed current: commit 8a56e0d (loss-fix + refresh) is an
+  ancestor of HEAD, no src changes since; 4× 800×600 PNGs valid
+  (`file`: 800×600 RGB), tracked in git; `convert` (ImageMagick 7.1.1) present;
+  zero TODO/FIXME in src/; 20 tracked files clean.
+- Working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify present.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-23i).
