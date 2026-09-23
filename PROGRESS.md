@@ -626,3 +626,17 @@
   so no re-render needed; 4× 800×600 PNGs valid; 20 tracked files clean;
   HEAD == origin/master (681206a).
 - All AGENT.md phases remain complete. No code changes needed (2026-09-23p).
+
+## 2026-09-23 — Re-verification (no changes required)
+- NOTE: plain `make` still fails with `fatal error: error writing to
+  /tmp/ccXXXX.s: No space left on device` — `/tmp` (987M tmpfs) remains
+  100% full from other tooling. Workaround:
+  `mkdir -p /root/tmpbuild && TMPDIR=/root/tmpbuild make`.
+- With workaround: `make clean && make` warning-free (exit 0); smoke test
+  200×150/4spp/train200: loss 1.09 (stable, pred+1 denom), avg 91.0/81.8/68.2
+  (not black), 0.009 ms/pixel, 3.18 Mrays/s, keep 0.8%.
+- No src/ changes since screenshots rendered (8a56e0d ancestor of HEAD),
+  so no re-render needed; 4× 800×600 PNGs valid (`file`: 800×600 RGB);
+  20 tracked files clean (no binary/PPM/logs/loop.sh); zero TODO/FIXME
+  in src/; HEAD == origin/master (fc8f7a8).
+- All AGENT.md phases remain complete. No code changes needed (2026-09-23q).
