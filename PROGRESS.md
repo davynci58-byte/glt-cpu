@@ -830,3 +830,18 @@
   zero TODO/FIXME in src/; `convert` (ImageMagick 7.1.1) present.
 - Working tree clean, `origin/master` in sync (78ebcab).
 - All AGENT.md phases remain complete. No code changes needed (2026-09-24i).
+
+## 2026-09-24 — Re-verification (no changes required)
+- NOTE: plain `make` still fails with `fatal error: error writing to
+  /tmp/ccXXXX.s: No space left on device` — `/tmp` (987M tmpfs) remains
+  100% full from other tooling. Workaround:
+  `mkdir -p /root/tmpbuild2 && TMPDIR=/root/tmpbuild2 make`.
+- `make clean && make` warning-free (exit 0); rebuilt `glt` binary;
+  smoke test 200×150/4spp/train200: loss 1.11 (stable, pred+1 denom),
+  avg 90.8/81.9/68.2 (not black), 0.009 ms/pixel, 3.17 Mrays/s, keep 0.8%.
+- 4× 800×600 PNGs valid (`file`: 800×600 RGB), tracked in git; 20 tracked
+  files clean (no binary/PPM/logs/loop.sh); README checklist PASS (emoji
+  title, 4 screenshots, build/run, 3× pseudocode, benchmarks, license);
+  zero TODO/FIXME in src/.
+- Working tree clean, `origin/master` in sync (da7f63b).
+- All AGENT.md phases remain complete. No code changes needed (2026-09-24j).
