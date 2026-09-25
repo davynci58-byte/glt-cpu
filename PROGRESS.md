@@ -1415,3 +1415,16 @@
   benchmarks, license); scenes/*.glt (4) present; zero TODO/FIXME in src/;
   tags v1.0-glt…v1.5-verify present.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-25h).
+
+## 2026-09-25 — Re-verification (no changes required)
+- NOTE: `/tmp` (987M tmpfs) remains 100% full from other tooling; used
+  `TMPDIR=/root/tmpbuild2` workaround (`make`: binary up to date, exit 0).
+- Smoke test 200×150/4spp/train200: loss 1.44 (stable, pred+1 denom),
+  bright render (~80/channel, not black), 0.009 ms/pixel, 3.13 Mrays/s,
+  keep 0.8%.
+- No src/ changes since screenshots rendered (8a56e0d ancestor of HEAD),
+  so no re-render needed; 4× 800×600 PNGs valid (`file`: 800×600 RGB),
+  tracked in git; 20 tracked files clean; README checklist PASS;
+  tags v1.0-glt…v1.5-verify present; working tree clean, `origin/master`
+  in sync (418bd15).
+- All AGENT.md phases remain complete. No code changes needed (2026-09-25i).
