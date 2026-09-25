@@ -1165,3 +1165,18 @@
   benchmarks, license); scenes/*.glt (4) present; zero TODO/FIXME in src/.
 - Working tree clean, `origin/master` in sync (c0ad262).
 - All AGENT.md phases remain complete. No code changes needed (2026-09-25c).
+
+## 2026-09-25 — Re-verification (no changes required)
+- NOTE: `/tmp` (987M tmpfs) remains 100% full from other tooling; plain
+  `make` would fail writing assembler temporaries. Workaround:
+  `mkdir -p /root/tmpbuild2 && TMPDIR=/root/tmpbuild2 make`.
+- `make clean && make` warning-free (exit 0); rebuilt `glt` binary;
+  smoke test 200×150/4spp/train200: loss 1.10 (stable, pred+1 denom),
+  avg 90.9/82.0/68.3 (not black), 0.015 ms/pixel, 1.98 Mrays/s, keep 0.8%.
+- No src changes since screenshots rendered (8a56e0d ancestor of HEAD),
+  so no re-render needed; 4× 800×600 PNGs valid (`file`: 800×600 RGB),
+  tracked in git; 20 tracked files clean (no binary/PPM/logs/loop.sh);
+  README checklist PASS; zero TODO/FIXME in src/;
+  tags v1.0-glt…v1.5-verify present.
+- Working tree clean, `origin/master` in sync (6d4a41c).
+- All AGENT.md phases remain complete. No code changes needed (2026-09-25d).
