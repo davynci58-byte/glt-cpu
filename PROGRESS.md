@@ -1356,3 +1356,18 @@
   tags v1.0-glt…v1.5-verify present.
 - Working tree clean, `origin/master` in sync (5c2871e).
 - All AGENT.md phases remain complete. No code changes needed (2026-09-25d).
+
+## 2026-09-25 — Re-verification (no changes required)
+- NOTE: `/tmp` (987M tmpfs) remains 100% full from other tooling; plain
+  `make` would fail writing assembler temporaries. Workaround:
+  `mkdir -p /root/tmpbuild2 && TMPDIR=/root/tmpbuild2 make`.
+- `make` up to date (exit 0, binary current); smoke test
+  200×150/4spp/train200: loss 1.2203 (stable, pred+1 denom),
+  avg 91.0/82.3/68.7 (not black), 0.010 ms/pixel, 3.01 Mrays/s, keep 0.8%.
+- 4× 800×600 PNGs valid (`file`: 800×600 RGB), tracked in git; 20 tracked
+  files clean (PNGs tracked, PPMs local-only, no binary/logs/loop.sh);
+  README checklist PASS (emoji title, 4 screenshots, build/run, 3× pseudocode,
+  benchmarks, license); scenes/*.glt (4) present; zero TODO/FIXME in src/;
+  tags v1.0-glt…v1.5-verify present.
+- Working tree clean, `origin/master` in sync (d04e89f).
+- All AGENT.md phases remain complete. No code changes needed (2026-09-25e).
