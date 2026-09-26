@@ -1480,3 +1480,18 @@
   tags v1.0-glt…v1.5-verify present.
 - Working tree clean, `origin/master` in sync (27554fc).
 - All AGENT.md phases remain complete. No code changes needed (2026-09-26b).
+
+## 2026-09-26 — Re-verification (no changes required)
+- NOTE: plain `make` still fails with `fatal error: error writing to
+  /tmp/ccXXXX.s: No space left on device` — `/tmp` (987M tmpfs) remains
+  100% full from other tooling. Workaround:
+  `mkdir -p /root/tmpbuild2 && TMPDIR=/root/tmpbuild2 make`.
+- `make clean && make` warning-free (exit 0); rebuilt `glt` binary;
+  smoke test 200×150/4spp/train200: loss 1.2907 (stable, pred+1 denom),
+  avg 91.1/82.1/68.5 (not black), 0.009 ms/pixel, 3.15 Mrays/s, keep 0.8%.
+- 4× 800×600 PNGs valid (`file`: 800×600 RGB), tracked in git; 20 tracked
+  files clean (no binary/PPM/logs/loop.sh); README checklist PASS (emoji
+  title, 4 screenshots, build/run, 3× pseudocode, benchmarks, license);
+  LICENSE + .gitignore + scenes/*.glt (4) verified.
+- Working tree clean, `origin/master` in sync.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-26c).
