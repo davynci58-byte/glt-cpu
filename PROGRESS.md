@@ -1683,6 +1683,20 @@
 - All AGENT.md phases remain complete. No code changes needed (2026-09-26p).
 
 ## 2026-09-27 — Re-verification (no changes required)
+- `/tmp` tmpfs recovered (9% used) — plain `make clean && make` works again,
+  warning-free (exit 0), no TMPDIR workaround needed.
+- All 4 scenes smoke-tested 200×150/4spp/train200: cornell avg 90.9/82.1/68.3,
+  bedroom 120.3/93.1/71.6, dining 201.4/181.5/158.5, staircase 129.7/129.7/143.8
+  (all bright, not black); loss ~1.1 stable (pred+1 denom), keep 0.0–1.0%.
+- No src changes since screenshots rendered (8a56e0d ancestor of HEAD),
+  so no re-render needed; 4× 800×600 PNGs valid (`file`: 800×600 RGB),
+  tracked in git; 20 tracked files clean (no binary/PPM/logs/loop.sh);
+  README checklist PASS; zero TODO/FIXME in src/; LICENSE + .gitignore +
+  scenes/*.glt (4) verified; tags v1.0-glt…v1.5-verify present.
+- Working tree clean, `origin/master` in sync.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-27).
+
+## 2026-09-27 — Re-verification (no changes required)
 - `/tmp` tmpfs recovered (4% used vs 100% full in prior days) — plain
   `make clean && make` works again, warning-free (exit 0), no TMPDIR
   workaround needed; rebuilt `glt` binary.
