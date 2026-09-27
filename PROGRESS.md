@@ -2022,3 +2022,16 @@
   LICENSE + .gitignore + scenes/*.glt (4) verified; zero TODO/FIXME in src/.
 - Working tree clean, `origin/master` in sync.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-27).
+
+## 2026-09-27 — Re-verification (no changes required)
+- `/tmp` healthy (17% used); plain `make clean && make` warning-free
+  (exit 0), no TMPDIR workaround needed; rebuilt `glt` binary.
+- Smoke test 200×150/4spp/train200: loss 1.1279 (stable, pred+1 denom),
+  summed avg 241 (~80/channel, not black), 0.011 ms/pixel, 2.58 Mrays/s,
+  keep 0.8%.
+- 4× 800×600 PNGs valid (`file`: 800×600 RGB), tracked in git; 20 tracked
+  files clean (no binary/PPM/logs/loop.sh); README checklist PASS (emoji
+  title, 4 screenshots, build/run, 3× pseudocode, benchmarks, license);
+  zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
+- Working tree clean, `origin/master` in sync (49387da).
+- All AGENT.md phases remain complete. No code changes needed (2026-09-27e).
