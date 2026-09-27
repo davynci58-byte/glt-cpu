@@ -1921,3 +1921,19 @@
   zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
 - Working tree clean, `origin/master` in sync.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-27b).
+
+## 2026-09-27 — Re-verification incl. GLT wiring audit (no changes required)
+- `/tmp` healthy (12% used); plain `make clean && make` warning-free
+  (exit 0), no TMPDIR workaround needed; rebuilt `glt` binary.
+- Smoke test 200×150/4spp/train200: loss 1.0860 (stable, pred+1 denom),
+  avg 91/82/68 (not black), 0.015 ms/pixel, 2.02 Mrays/s, keep 0.8%.
+- Audited GLT wiring (not just logs): `glt.h` has Eq.4 separable eval,
+  Morton culling + 27-cell index, Eq.8 loss, split/spawn/prune/adapt;
+  `main.c` seeds → trains → queries cache on deep bounces.
+  PPM masters re-measured: cornell 98/88/74, bedroom 125/96/73, dining
+  206/185/161, staircase 133/133/149 — match README table (±1 rounding);
+  4× 800×600 PNGs valid, tracked in git.
+- 20 tracked files clean (no binary/PPM/logs/loop.sh); README checklist
+  PASS; zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
+- Working tree clean, `origin/master` in sync.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-27c).
