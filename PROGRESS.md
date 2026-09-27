@@ -1782,3 +1782,17 @@
   zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
 - Working tree clean, `origin/master` in sync.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-27).
+
+## 2026-09-27 — Re-verification (no changes required, 2nd run)
+- Plain `make clean && make` warning-free (exit 0), `/tmp` healthy (5% used),
+  no TMPDIR workaround needed; rebuilt `glt` binary.
+- Smoke test 200×150/4spp/train200 on fresh binary: loss 1.0982 (stable,
+  pred+1 denom), avg 91.5/82.2/68.8 (not black), 0.010 ms/pixel,
+  3.10 Mrays/s, keep 0.8%.
+- No src/ changes since screenshots rendered (8a56e0d ancestor of HEAD),
+  so no re-render needed; 4× 800×600 PNGs valid (`file`: 800×600 RGB),
+  tracked in git; 20 tracked files clean (no binary/PPM/logs/loop.sh);
+  README checklist PASS; zero TODO/FIXME in src/;
+  tags v1.0-glt…v1.5-verify present.
+- Working tree clean, `origin/master` in sync.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-27b).
