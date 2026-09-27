@@ -1811,3 +1811,15 @@
   headers have file-purpose + doc comments; LICENSE + .gitignore verified.
 - Working tree clean, `origin/master` in sync.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-27).
+
+## 2026-09-27 — Re-verification (no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200x150/4spp/train200:
+  loss 1.11 (stable, pred+1 denom), avg 91.1/82.4/68.8 (not black),
+  0.014 ms/pixel, 2.05 Mrays/s, keep 0.8%.
+- README checklist all PASS (emoji title, 4 screenshots, build/run,
+  3x pseudocode blocks, benchmarks, license); 4x 800x600 PNGs valid
+  (`file`: 800x600 RGB), tracked in git; 20 tracked files clean
+  (no binary/PPM/logs/loop.sh); zero TODO/FIXME in src/;
+  tags v1.0-glt...v1.5-verify present.
+- Working tree clean, `origin/master` in sync.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-27c).
