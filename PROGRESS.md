@@ -1680,6 +1680,19 @@
   title, 4 screenshots, build/run, 3× pseudocode, benchmarks, license);
   zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
 - Working tree clean, `origin/master` in sync (6ddf3ef).
+
+## 2026-09-28 — Re-verification (no changes required)
+- `/tmp` tmpfs has free space again (57% used), so plain `make` works with
+  no TMPDIR workaround needed: `make clean && make` warning-free (exit 0).
+- Smoke test 200×150/4spp/train200 on fresh binary: loss 1.0992 (stable,
+  pred+1 denom), avg 90.9/81.9/68.2 (not black), 0.010 ms/pixel,
+  2.98 Mrays/s, keep 0.8%.
+- 4× 800×600 PNGs valid (`file`: 800×600 RGB), tracked in git; 20 tracked
+  files clean (no binary/PPM/logs/loop.sh); README checklist PASS (emoji
+  title, 4 screenshots, build/run, 3× pseudocode, benchmarks, license);
+  zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
+- Working tree clean, `origin/master` in sync (68f4435).
+- All AGENT.md phases remain complete. No code changes needed (2026-09-28).
 - All AGENT.md phases remain complete. No code changes needed (2026-09-26p).
 
 ## 2026-09-28 — Re-verification (no changes required)
