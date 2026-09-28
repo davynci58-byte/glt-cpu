@@ -2214,3 +2214,17 @@
   files clean (no binary/PPM/logs/loop.sh); README checklist PASS (emoji
   title, 4 screenshots, build/run, 3× pseudocode, benchmarks, license).
 - All AGENT.md phases remain complete. No code changes needed (2026-09-28g).
+
+## 2026-09-28 — Re-verification (no changes required)
+- Plain `make clean && make` warning-free (exit 0); `/tmp` tmpfs healthy
+  again (52% used), no TMPDIR workaround needed this run.
+- Smoke test 200×150/4spp/train200: loss 1.1197 (stable, pred+1 denom),
+  0.010 ms/pixel, 3.10 Mrays/s, keep 0.9% (2048 alive).
+- Screenshot PPM masters re-measured: cornell 98.2/88.9/74.6,
+  bedroom 125.7/96.2/73.8, dining 206.5/185.3/161.2,
+  staircase 134.0/134.0/149.6 — match README results table;
+  4× 800×600 PNGs valid (`file`: 800×600 RGB), tracked in git; 20 tracked
+  files clean (no binary/PPM/logs/loop.sh); README checklist PASS (emoji
+  title, 4 screenshots, build/run, 3× pseudocode, benchmarks, license);
+  zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-28h).
