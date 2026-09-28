@@ -2122,3 +2122,14 @@
   zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
 - Working tree clean, `origin/master` in sync (60d5baa).
 - All AGENT.md phases remain complete. No code changes needed (2026-09-28).
+
+## 2026-09-28 — Re-verification (no changes required)
+- `/tmp` pressure cleared (46% used): plain `make clean && make` works again,
+  warning-free (exit 0), no TMPDIR workaround needed.
+- Smoke test 200×150/4spp/train200: loss 1.09 (stable, pred+1 denom),
+  avg 90.8/82.0/68.3 (not black), 0.015 ms/pixel, 1.91 Mrays/s, keep 0.8%.
+- No src changes since screenshots rendered (8a56e0d ancestor of HEAD),
+  so no re-render needed; 4× 800×600 PNGs valid, tracked in git; 20 tracked
+  files clean; README checklist PASS; tags v1.0-glt…v1.5-verify present.
+- Working tree clean, `origin/master` in sync.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-28).
