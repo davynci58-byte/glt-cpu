@@ -2228,3 +2228,18 @@
   title, 4 screenshots, build/run, 3× pseudocode, benchmarks, license);
   zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
 - All AGENT.md phases remain complete. No code changes needed (2026-09-28h).
+
+## 2026-09-28 — Re-verification (no changes required)
+- Plain `make clean && make` warning-free (exit 0); `/tmp` tmpfs healthy
+  (52% used), no TMPDIR workaround needed.
+- Smoke test 200×150/4spp/train200: loss 1.0747 (stable, pred+1 denom),
+  avg 91.1/82.0/68.5 (not black), 0.009 ms/pixel, 3.19 Mrays/s, keep 0.8%.
+- No src changes since screenshots rendered (8a56e0d ancestor of HEAD),
+  so no re-render needed; PPM masters re-measured: cornell 98/89/75,
+  bedroom 126/96/74, dining 207/185/161, staircase 134/134/150 — match
+  README results table; 4× 800×600 PNGs valid (`file`: 800×600 RGB),
+  tracked in git; 20 tracked files clean (no binary/PPM/logs/loop.sh);
+  README checklist PASS (emoji title, 4 screenshots, build/run,
+  3× pseudocode, benchmarks, license); zero TODO/FIXME in src/;
+  tags v1.0-glt…v1.5-verify present; HEAD == origin/master (fc2cee8).
+- All AGENT.md phases remain complete. No code changes needed (2026-09-28i).
