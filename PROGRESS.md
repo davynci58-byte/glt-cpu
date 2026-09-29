@@ -2513,3 +2513,18 @@
   zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
 - Working tree clean, `origin/master` in sync (4c9f942).
 - All AGENT.md phases remain complete. No code changes needed (2026-09-29f).
+
+## 2026-09-29 — Re-verification (no changes required)
+- `/tmp` 92% used (88M avail): `TMPDIR=/root/tmpbuild make` up to date
+  (exit 0, warning-free); smoke test 200×150/4spp/train200: loss 1.1716
+  (stable, pred+1 denom), avg ~91/82/68 (not black), 0.010 ms/pixel,
+  2.94 Mrays/s, keep 0.9%.
+- PPM masters re-measured: cornell 98/89/75, bedroom 126/96/74, dining
+  207/185/161, staircase 134/134/150 — match README results table;
+  4× 800×600 PNGs valid (`file`: 800×600 RGB), tracked in git; 20 tracked
+  files clean (no binary/PPM/logs/loop.sh); README checklist PASS (emoji
+  title, 4 screenshots, build/run, 3× pseudocode, benchmarks, license);
+  zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present; `convert`
+  (ImageMagick 7.1.1) present.
+- Working tree clean, `origin/master` in sync (b608905).
+- All AGENT.md phases remain complete. No code changes needed (2026-09-29g).
