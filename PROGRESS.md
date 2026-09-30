@@ -2540,3 +2540,15 @@
   zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
 - Working tree clean, `origin/master` in sync (0857b6b).
 - All AGENT.md phases remain complete. No code changes needed (2026-09-29h).
+
+## 2026-09-30 — Re-verification (no changes required)
+- `make clean && make` via `TMPDIR=/root/tmpbuild2` warning-free (exit 0);
+  rebuilt `glt` binary.
+- Smoke test 200×150/4spp/train200: loss 1.1923 (stable, pred+1 denom),
+  avg 90.8/81.9/68.5 (not black), 0.009 ms/pixel, 3.22 Mrays/s, keep 0.8%.
+- 4× 800×600 PNGs valid (`file`: 800×600 RGB), tracked in git; 20 tracked
+  files clean (no binary/PPM/logs/loop.sh); README checklist PASS (emoji
+  title, 4 screenshots, build/run, 3× pseudocode, benchmarks, license);
+  zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
+- Working tree clean, `origin/master` in sync (6c5f641).
+- All AGENT.md phases remain complete. No code changes needed (2026-09-30).
