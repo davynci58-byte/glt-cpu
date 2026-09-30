@@ -2701,3 +2701,15 @@
   zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
 - Working tree clean, `origin/master` in sync (f4a296a).
 - All AGENT.md phases remain complete. No code changes needed (2026-09-30b).
+
+## 2026-09-30 — Re-verification (no changes required)
+- NOTE: plain `make` still fails with `No space left on device` on /tmp
+  (987M tmpfs 100% full from other tooling). Workaround:
+  `mkdir -p /root/tmpbuild && TMPDIR=/root/tmpbuild make`.
+- With workaround: `make clean && make` warning-free (exit 0); smoke test
+  200×150/4spp/train200: loss 1.14 (stable, pred+1 denom), avg 90.9/82.1/68.5
+  (not black), 0.018 ms/pixel, 1.65 Mrays/s, keep 0.9%.
+- No src changes since screenshots rendered (8a56e0d ancestor of HEAD),
+  so no re-render needed; 4× 800×600 PNGs valid; 20 tracked files clean;
+  HEAD == origin/master.
+- All AGENT.md phases remain complete. No code changes needed (2026-09-30).
