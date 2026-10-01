@@ -2861,3 +2861,16 @@
   zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
 - Working tree clean, `origin/master` in sync (3b98ac9).
 - All AGENT.md phases remain complete. No code changes needed (2026-10-01d).
+
+## 2026-10-01 — Re-verification (no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  loss 1.16 (stable, pred+1 denom), avg 91.4/82.3/68.8 (not black),
+  0.010 ms/pixel, 2.88 Mrays/s, keep 0.8%.
+- No src/ changes since screenshots rendered (nothing since Sep 21 20:20),
+  so no re-render needed; 4× 800×600 PNGs valid (`file`: 800×600 RGB),
+  tracked in git; README checklist PASS (emoji title, 4 screenshots, build/run,
+  3× pseudocode blocks, benchmarks, license); LICENSE + .gitignore +
+  scenes/*.glt (4) verified; 20 tracked files clean.
+- Working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify
+  present locally and on origin.
+- All AGENT.md phases remain complete. No code changes needed (2026-10-01).
