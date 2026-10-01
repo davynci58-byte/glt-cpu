@@ -1681,6 +1681,21 @@
   zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
 - Working tree clean, `origin/master` in sync (6ddf3ef).
 
+## 2026-10-01 — Re-verification (no changes required)
+- `/tmp` tmpfs still 100% full from other tooling; used
+  `TMPDIR=/root/tmpbuild` workaround (`make clean && make`: warning-free,
+  exit 0, rebuilt `glt` binary).
+- Smoke test 200×150/4spp/train200 on fresh binary: loss 1.2349 (stable,
+  pred+1 denom), avg 91.3/82.3/68.7 (not black), 0.009 ms/pixel,
+  3.14 Mrays/s, keep 0.8%.
+- No src changes since screenshots rendered (8a56e0d ancestor of HEAD),
+  so no re-render needed; 4× 800×600 PNGs valid (`file`: 800×600 RGB),
+  tracked in git; 20 tracked files clean (no binary/PPM/logs/loop.sh);
+  README checklist PASS; zero TODO/FIXME in src/;
+  tags v1.0-glt…v1.5-verify present.
+- Working tree clean, `origin/master` in sync (d5e807a).
+- All AGENT.md phases remain complete. No code changes needed (2026-10-01).
+
 ## 2026-09-28 — Re-verification (no changes required)
 - `/tmp` tmpfs has free space again (57% used), so plain `make` works with
   no TMPDIR workaround needed: `make clean && make` warning-free (exit 0).
