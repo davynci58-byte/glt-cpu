@@ -2874,3 +2874,15 @@
 - Working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify
   present locally and on origin.
 - All AGENT.md phases remain complete. No code changes needed (2026-10-01).
+
+## 2026-10-01 — Re-verification (no changes required)
+- NOTE: `/tmp` tmpfs healthy again (6% used) — plain `make clean && make`
+  works with no TMPDIR workaround; warning-free (exit 0).
+- Smoke test 200×150/4spp/train200: loss 1.11 (stable, pred+1 denom),
+  avg 91.1/82.2/68.6 (not black), 0.014 ms/pixel, 2.17 Mrays/s, keep 0.8%.
+- 4× 800×600 PNGs valid (`file`: 800×600 RGB), tracked in git; 20 tracked
+  files clean (no binary/PPM/logs/loop.sh); README checklist PASS (emoji
+  title, 4 screenshots, build/run, 3× pseudocode, benchmarks, license);
+  zero TODO/FIXME in src/; scenes/*.glt (4), LICENSE, .gitignore verified.
+- Working tree clean, `origin/master` in sync.
+- All AGENT.md phases remain complete. No code changes needed (2026-10-01b).
