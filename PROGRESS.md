@@ -2847,3 +2847,17 @@
 - Full checklist re-verified: 4× 800×600 PNGs valid, README items all
   present, LICENSE + .gitignore present, tags v1.0-glt…v1.5-verify,
   `master` in sync with `origin/master`. No src changes — no re-render.
+
+## 2026-10-01 — Re-verification (no changes required)
+- `/tmp` healthy (4% used); plain `make clean && make` warning-free
+  (exit 0), no TMPDIR workaround needed; rebuilt `glt` binary (gitignored).
+- Smoke test 200×150/4spp/train200: loss 1.1083 (stable, pred+1 denom),
+  avg 91.7/82.4/69.0 (not black), 0.014 ms/pixel, 2.13 Mrays/s, keep 0.8%.
+- No src changes since screenshots rendered (8a56e0d ancestor of HEAD,
+  `git log 8a56e0d..HEAD -- src/` empty), so no re-render needed;
+  4× 800×600 PNGs valid (`file`: 800×600 RGB), tracked in git; 20 tracked
+  files clean (no binary/PPM/logs/loop.sh); README checklist PASS (emoji
+  title, 4 screenshots, build/run, 3× pseudocode, benchmarks, license);
+  zero TODO/FIXME in src/; tags v1.0-glt…v1.5-verify present.
+- Working tree clean, `origin/master` in sync (3b98ac9).
+- All AGENT.md phases remain complete. No code changes needed (2026-10-01d).
