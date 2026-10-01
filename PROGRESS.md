@@ -2834,3 +2834,16 @@
   present.
 - Working tree clean, `origin/master` in sync.
 - All AGENT.md phases remain complete. No code changes needed (2026-10-01c).
+
+## 2026-10-01 — Fix broken build: /tmp 100% full, binary deleted
+- `make clean` had removed the gitignored `glt` binary and rebuild failed:
+  `fatal error: error writing to /tmp/cc*.s: No space left on device`.
+- Root cause: /tmp (987M tmpfs) was 100% full from ~270 leaked hidden
+  `.b*.so` files (~5.4M each, Sep 28-29, unused — fuser clean). Deleted the
+  204 stale ones (mtime +0d); /tmp now 3% used (961M avail). Kept the 64
+  fresh ones in case the active harness still needs them.
+- `make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  avg 91.4/82.2/68.6 (not black), 3.03 Mrays/s, keep 0.8%.
+- Full checklist re-verified: 4× 800×600 PNGs valid, README items all
+  present, LICENSE + .gitignore present, tags v1.0-glt…v1.5-verify,
+  `master` in sync with `origin/master`. No src changes — no re-render.
