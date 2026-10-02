@@ -311,3 +311,7 @@
 - `git log -- src/` confirms no src changes since screenshots rendered (8a56e0d),
   so no re-render needed. All AGENT.md phases remain complete. (Prior 10-02
   per-run entries folded into the summary above per the 10-01 rule.)
+- Late 10-02 re-check: `make clean && make` warning-free (exit 0); smoke test
+  200×150/4spp/train200: loss 1.22, avg 91.2/81.9/68.5 (not black),
+  0.009 ms/pixel, 3.22 Mrays/s, keep 0.8%; 4× 800×600 PNGs valid,
+  working tree clean, `origin/master` in sync. No changes needed.
