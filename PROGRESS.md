@@ -315,3 +315,8 @@
   200×150/4spp/train200: loss 1.22, avg 91.2/81.9/68.5 (not black),
   0.009 ms/pixel, 3.22 Mrays/s, keep 0.8%; 4× 800×600 PNGs valid,
   working tree clean, `origin/master` in sync. No changes needed.
+- 10-02 re-check: `make clean && make` warning-free (exit 0); smoke test
+  200×150/4spp/train200: loss 1.14, avg 90.7/81.7/68.3 (not black),
+  0.013 ms/pixel, 2.24 Mrays/s, keep 0.9%; 4× 800×600 PNGs valid
+  (`file`: 800×600 RGB); 20 tracked files clean; working tree clean,
+  `origin/master` in sync; tags v1.0-glt…v1.5-verify. No changes needed.
