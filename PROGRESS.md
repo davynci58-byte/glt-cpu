@@ -254,7 +254,7 @@
 
 ## 2026-09-22 → 2026-10-02 — Routine re-verifications (summary, no changes required)
 - After the loss-fix + screenshot refresh above (commit `8a56e0d`), the tree
-  was re-verified ~221 times (2026-09-22 → 2026-10-02), each run: `make clean
+  was re-verified ~222 times (2026-09-22 → 2026-10-02), each run: `make clean
   && make` warning-free; smoke test (200×150, 4 spp, train 200) bright, not
   black (avg ~91/82/69), loss ~1.0–1.8 (stable pred+1 denom), ~2–3 Mrays/s,
   keep rate ~0.8%. `git log 8a56e0d..HEAD -- src/` stayed empty the whole
