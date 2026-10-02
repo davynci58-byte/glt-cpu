@@ -346,4 +346,14 @@
   (`file`: 800×600 RGB); tracked files clean (no binary/PPM/logs/loop.sh);
   working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify.
 - `git log -- src/` confirms no src changes since screenshots rendered (8a56e0d),
+  so no re-render needed. All AGENT.md phases remain complete (5th run).
+
+## 2026-10-02 — Re-verification (no changes required, 6th run)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  loss 1.16, avg 90.9/81.7/68.1 (not black), 0.012 ms/pixel, 2.46 Mrays/s, keep 0.9%.
+- README checklist all PASS (emoji title, 4× screenshots, build/run,
+  3× pseudocode blocks, benchmarks, license); 4× 800×600 PNGs valid
+  (`file`: 800×600 RGB); tracked files clean (20 files: no binary/PPM/logs/loop.sh);
+  working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify.
+- `git log -- src/` confirms no src changes since screenshots rendered (8a56e0d),
   so no re-render needed. All AGENT.md phases remain complete.
