@@ -300,3 +300,12 @@
   re-render; 4× 800×600 PNGs valid, tracked in git.
 - Going forward: routine green re-verifications update the summary's date
   range in place instead of appending a new entry per run.
+
+## 2026-10-02 — Re-verification (no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
+  loss 1.05, avg 90.5/81.8/68.1 (not black), 3.08 Mrays/s, keep 0.8%.
+- README checklist all PASS (emoji title, 4× screenshots, build/run,
+  3× pseudocode blocks, benchmarks, license); 4× 800×600 PNGs valid
+  (`file`: 800×600 RGB); tracked files clean (20 files: no binary/PPM/logs/loop.sh);
+  working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify.
+- All AGENT.md phases remain complete. No code changes needed.
