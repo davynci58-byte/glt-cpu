@@ -254,7 +254,7 @@
 
 ## 2026-09-22 → 2026-10-02 — Routine re-verifications (summary, no changes required)
 - After the loss-fix + screenshot refresh above (commit `8a56e0d`), the tree
-  was re-verified ~222 times (2026-09-22 → 2026-10-02), each run: `make clean
+  was re-verified ~230 times (2026-09-22 → 2026-10-02), each run: `make clean
   && make` warning-free; smoke test (200×150, 4 spp, train 200) bright, not
   black (avg ~91/82/69), loss ~1.0–1.8 (stable pred+1 denom), ~2–3 Mrays/s,
   keep rate ~0.8%. `git log 8a56e0d..HEAD -- src/` stayed empty the whole
@@ -301,59 +301,13 @@
 - Going forward: routine green re-verifications update the summary's date
   range in place instead of appending a new entry per run.
 
-## 2026-10-02 — Re-verification (no changes required)
+## 2026-10-02 — Verification (no changes required)
 - `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
-  loss 1.05, avg 90.5/81.8/68.1 (not black), 3.08 Mrays/s, keep 0.8%.
-- README checklist all PASS (emoji title, 4× screenshots, build/run,
-  3× pseudocode blocks, benchmarks, license); 4× 800×600 PNGs valid
-  (`file`: 800×600 RGB); tracked files clean (20 files: no binary/PPM/logs/loop.sh);
-  working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify.
-- All AGENT.md phases remain complete. No code changes needed.
-
-## 2026-10-02 — Re-verification (no changes required, 2nd run)
-- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
-  loss 1.11, avg 91.1/82.2/68.5 (not black), 0.010 ms/pixel, 2.97 Mrays/s, keep 0.8%.
-- README checklist all PASS (emoji title, 4× screenshots, build/run,
-  3× pseudocode blocks, benchmarks, license); 4× 800×600 PNGs valid
-  (`file`: 800×600 RGB); tracked files clean (20 files: no binary/PPM/logs/loop.sh);
-  working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify.
-- All AGENT.md phases remain complete. No code changes needed.
-
-## 2026-10-02 — Re-verification (no changes required, 3rd run)
-- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
-  loss 1.04, avg 90.6/81.7/68.1 (not black), 0.009 ms/pixel, 3.12 Mrays/s, keep 0.8%.
-- README checklist all PASS (emoji title, 4× screenshots, build/run,
-  3× pseudocode blocks, benchmarks, license); 4× 800×600 PNGs valid
-  (`file`: 800×600 RGB); tracked files clean (20 files: no binary/PPM/logs/loop.sh);
-  working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify.
-- All AGENT.md phases remain complete. No code changes needed.
-
-## 2026-10-02 — Re-verification (no changes required, 4th run)
-- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
-  loss 1.18, avg 91.3/82.1/68.7 (not black), 0.011 ms/pixel, 2.69 Mrays/s, keep 0.9%.
+  loss 1.13, avg ~91/82/69 (not black), 0.012 ms/pixel, 2.53 Mrays/s, keep 0.8%.
 - README checklist all PASS (emoji title, 4× screenshots, build/run,
   3× pseudocode blocks, benchmarks, license); 4× 800×600 PNGs valid
   (`file`: 800×600 RGB); tracked files clean (20 files: no binary/PPM/logs/loop.sh);
   working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify.
 - `git log -- src/` confirms no src changes since screenshots rendered (8a56e0d),
-  so no re-render needed. All AGENT.md phases remain complete.
-
-## 2026-10-02 — Re-verification (no changes required, 5th run)
-- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
-  avg 90.6/81.9/68.3 (not black), 0.010 ms/pixel, 2.87 Mrays/s, keep 0.8%.
-- README checklist all PASS (emoji title, 4× screenshots, build/run,
-  3× pseudocode blocks, benchmarks, license); 4× 800×600 PNGs valid
-  (`file`: 800×600 RGB); tracked files clean (no binary/PPM/logs/loop.sh);
-  working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify.
-- `git log -- src/` confirms no src changes since screenshots rendered (8a56e0d),
-  so no re-render needed. All AGENT.md phases remain complete (5th run).
-
-## 2026-10-02 — Re-verification (no changes required, 6th run)
-- `make clean && make` warning-free (exit 0); smoke test 200×150/4spp/train200:
-  loss 1.16, avg 90.9/81.7/68.1 (not black), 0.012 ms/pixel, 2.46 Mrays/s, keep 0.9%.
-- README checklist all PASS (emoji title, 4× screenshots, build/run,
-  3× pseudocode blocks, benchmarks, license); 4× 800×600 PNGs valid
-  (`file`: 800×600 RGB); tracked files clean (20 files: no binary/PPM/logs/loop.sh);
-  working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify.
-- `git log -- src/` confirms no src changes since screenshots rendered (8a56e0d),
-  so no re-render needed. All AGENT.md phases remain complete.
+  so no re-render needed. All AGENT.md phases remain complete. (Prior 10-02
+  per-run entries folded into the summary above per the 10-01 rule.)
