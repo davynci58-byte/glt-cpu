@@ -375,3 +375,8 @@
 - 4x 800x600 PNGs valid; README checklist PASS (emoji title, screenshots,
   build/run, 3x pseudocode, benchmarks, license); 20 tracked files clean;
   working tree clean, origin/master in sync; tags v1.0-glt..v1.5-verify.
+- 10-03 re-check: `make clean && make` warning-free (exit 0); smoke test
+  200×150/4spp/train200: loss 1.07, avg 90.9/81.9/68.3 (not black),
+  0.010 ms/pixel, 2.83 Mrays/s, keep 0.8%; 4× 800×600 PNGs valid
+  (`file`: 800×600 RGB); 20 tracked files clean; working tree clean,
+  `origin/master` in sync; tags v1.0-glt…v1.5-verify. No changes needed.
