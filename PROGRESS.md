@@ -348,3 +348,8 @@
   tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify.
   `git log -- src/` empty since screenshots rendered, so no re-render.
   All AGENT.md phases remain complete. No code changes needed.
+- 10-03 re-check: `make clean && make` warning-free (exit 0); smoke test
+  200×150/4spp/train200: loss 1.11, avg 91.3/82.4/68.9 (not black),
+  0.009 ms/pixel, 3.16 Mrays/s, keep 0.8%; 4× 800×600 PNGs valid
+  (`file`: 800×600 RGB); 20 tracked files clean; working tree clean,
+  `origin/master` in sync; tags v1.0-glt…v1.5-verify. No changes needed.
