@@ -367,3 +367,11 @@
   working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify;
   `git log 8a56e0d..HEAD -- src/` empty, so no re-render. All AGENT.md
   phases remain complete. No code changes needed.
+
+## 2026-10-03 — Final verification (all phases complete, no changes required)
+- `make clean && make` warning-free (exit 0); smoke test 200x150/4spp/train200:
+  avg ~91/82/68 (not black), 0.014 ms/pixel, 2.12 Mrays/s, keep 0.7%.
+- Perf-log units confirmed correct (`elapsed*1e3/mpix` ms/pixel in main.c:351).
+- 4x 800x600 PNGs valid; README checklist PASS (emoji title, screenshots,
+  build/run, 3x pseudocode, benchmarks, license); 20 tracked files clean;
+  working tree clean, origin/master in sync; tags v1.0-glt..v1.5-verify.
