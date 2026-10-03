@@ -359,4 +359,11 @@
   (`file`: 800×600 RGB); 20 tracked files clean (no binary/PPM/logs/loop.sh);
   working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify;
   `git log 8a56e0d..HEAD -- src/` empty, so no re-render. All AGENT.md
+   phases remain complete. No code changes needed.
+- 10-03 re-check: `make clean && make` warning-free (exit 0); smoke test
+  200×150/4spp/train200: loss 1.09, avg 91.2/82.2/68.6 (not black),
+  0.010 ms/pixel, 2.86 Mrays/s, keep 0.8%; 4× 800×600 PNGs valid
+  (`file`: 800×600 RGB); 20 tracked files clean (no binary/PPM/logs/loop.sh);
+  working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify;
+  `git log 8a56e0d..HEAD -- src/` empty, so no re-render. All AGENT.md
   phases remain complete. No code changes needed.
