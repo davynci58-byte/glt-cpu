@@ -380,3 +380,11 @@
   0.010 ms/pixel, 2.83 Mrays/s, keep 0.8%; 4× 800×600 PNGs valid
   (`file`: 800×600 RGB); 20 tracked files clean; working tree clean,
   `origin/master` in sync; tags v1.0-glt…v1.5-verify. No changes needed.
+- 10-03 re-check: `make clean && make` warning-free (exit 0); smoke test
+  200×150/4spp/train200: loss 1.21, avg 91.4/82.3/68.9 (not black),
+  0.010 ms/pixel, 3.00 Mrays/s, keep 0.8%; 4× 800×600 PNGs valid
+  (`file`: 800×600 RGB); 20 tracked files clean (no binary/PPM/logs/loop.sh);
+  working tree clean, `origin/master` in sync; tags v1.0-glt…v1.5-verify;
+  `git log 8a56e0d..HEAD -- src/` empty, so no re-render. README checklist
+  all PASS (emoji title, 4 screenshots, build/run, 3× pseudocode, benchmarks,
+  license). All AGENT.md phases remain complete. No code changes needed.
