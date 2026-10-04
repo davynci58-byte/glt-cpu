@@ -205,7 +205,8 @@ static scene_entry SCENES[] = {
 static void usage(const char *p) {
     fprintf(stderr, "Usage: %s [scene] [out.ppm] [spp] [options]\n", p);
     fprintf(stderr, "  scenes: cornell bedroom dining staircase (default cornell)\n");
-    fprintf(stderr, "  options: --scene NAME --out PATH --spp N --width W --height H --train N\n");
+    fprintf(stderr, "  options: --scene NAME --out PATH --spp N --width W --height H --train N --seed N\n");
+    fprintf(stderr, "  --seed: RNG seed (default 0x474C5421, reproducible); use --seed 0 for time-based noise\n");
 }
 
 int main(int argc, char **argv) {
@@ -213,6 +214,8 @@ int main(int argc, char **argv) {
     const char *out = "output.ppm";
     int spp = 16, W = 800, H = 600, train_iters = 2000;
     int out_set = 0;
+    unsigned int seed_opt = 0x474C5421u; /* fixed default: reproducible renders */
+    int seed_is_random = 0;
 
     for (int i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "--scene") && i + 1 < argc) scene_name = argv[++i];
@@ -221,6 +224,10 @@ int main(int argc, char **argv) {
         else if (!strcmp(argv[i], "--width") && i + 1 < argc) W = atoi(argv[++i]);
         else if (!strcmp(argv[i], "--height") && i + 1 < argc) H = atoi(argv[++i]);
         else if (!strcmp(argv[i], "--train") && i + 1 < argc) train_iters = atoi(argv[++i]);
+        else if (!strcmp(argv[i], "--seed") && i + 1 < argc) {
+            seed_opt = (unsigned int)strtoul(argv[++i], NULL, 0);
+            if (seed_opt == 0) seed_is_random = 1;
+        }
         else if (!strcmp(argv[i], "--help") || !strcmp(argv[i], "-h")) { usage(argv[0]); return 0; }
         else if (argv[i][0] != '-') {
             /* positional: [scene-or-out] [spp-or-out] [spp] ; also handle scenes/x.glt */
@@ -251,7 +258,10 @@ int main(int argc, char **argv) {
     static glt_model m; /* ~9.5 MB: static, not stack (8 MB limit) */
     glt_init(&m);
 
-    g_seed = (unsigned int)time(NULL) ^ 0x9E3779B9u;
+    /* Fixed default seed => byte-identical output for identical flags.
+     * Per-row RNG streams derive from (seed, y) only, so results are
+     * independent of OpenMP thread count/scheduling. --seed 0 = time-based. */
+    g_seed = seed_is_random ? ((unsigned int)time(NULL) ^ 0x9E3779B9u) : seed_opt;
 
     /* ---- Phase A: seed Gaussian cache from scene surface samples ---- */
     {

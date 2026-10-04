@@ -321,3 +321,23 @@
   10-02 → 10-03 added no content (PROGRESS.md-only appends). Left in
   history (rewriting pushed public history is worse); going forward,
   green re-verifications must NOT commit — only real changes get commits.
+
+## 2026-10-04 — Reproducible default seed + screenshot refresh
+- Found uncommitted `src/main.c` change: new `--seed N` flag with fixed
+  default `0x474C5421` (was `time(NULL)`-based). Per-row RNG streams
+  derive from `(seed, y)` only, so renders are now byte-identical for
+  identical flags and independent of OpenMP scheduling; `--seed 0`
+  restores old time-based noise. Usage text updated; README options line
+  documents `--seed`.
+- Verified: `TMPDIR=/root/tmpbuild make` warning-free (`/tmp` 100% full
+  again — same known tmpfs issue, workaround per 10-01 entry); smoke
+  test 200×150/4spp/train200 twice → identical md5
+  (`94c8b2deba941cc9e23c1db64a173306`), loss 1.10 (stable pred+1),
+  avg 91.4/82.3/68.7 (not black), ~3.0 Mrays/s, keep 0.9%.
+  `--seed 12345` → different checksum (flag works), `--seed 0` works.
+- Re-rendered all 4 scenes (800×600, 16 spp, train 1500): cornell
+  23.0s/2.46 Mrays/s (3051 alive), bedroom 24.2s/2.32, dining 26.4s/1.99
+  (2962 alive), staircase 23.1s/2.36 (2976 alive); `convert`ed PPM→PNG,
+  all PNG headers valid (800×600 RGB). Avg RGB matches README table
+  exactly (cornell 98/89/75, bedroom 126/96/74, dining 207/185/161,
+  staircase 134/134/150) — no table update needed.

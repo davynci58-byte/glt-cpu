@@ -21,7 +21,9 @@ Requires `gcc` with OpenMP (`-fopenmp`, included in the Makefile).
 ```
 
 Options: `--scene cornell|bedroom|dining|staircase`, `--out PATH`, `--spp N`,
-`--width W`, `--height H`, `--train N` (GLT residual-training iterations).
+`--width W`, `--height H`, `--train N` (GLT residual-training iterations),
+`--seed N` (RNG seed, default `0x474C5421` for byte-identical reproducible
+renders; use `--seed 0` for time-based noise).
 
 Output is PPM (P6, gamma 2.0 via sqrt). Convert to PNG if available:
 
