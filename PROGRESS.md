@@ -358,6 +358,16 @@
   200×150/4spp/train200 twice → identical md5
   (`94c8b2deba941cc9e23c1db64a173306`, same as the 10-04 seed entry —
   pixels untouched), avg 80.8/255 (not black), ~2.5–3.2 Mrays/s.
-  `OMP_NUM_THREADS=1/2/8` → identical pixels AND identical eval stats
+   `OMP_NUM_THREADS=1/2/8` → identical pixels AND identical eval stats
+   (`2872862 total = 25212 kept + 2847650 culled`, keep 0.9%).
+   No re-render needed (render math untouched); 4× 800×600 PNGs stand.
+
+## 2026-10-06 — Tag verified release (v1.7-atomic)
+- HEAD `265fa0d` (atomic GLT eval counters) was pushed but untagged.
+  Re-verified the entry above from scratch: `make clean && make`
+  warning-free (exit 0); smoke test 200×150/4spp/train200 loss 1.10,
+  avg 91.4/82.3/68.7 (not black); `OMP_NUM_THREADS=1/2/8` → identical
+  md5 (`94c8b2deba941cc9e23c1db64a173306`) AND identical eval stats
   (`2872862 total = 25212 kept + 2847650 culled`, keep 0.9%).
-  No re-render needed (render math untouched); 4× 800×600 PNGs stand.
+- 4× 800×600 PNGs valid (`file`: 800×600 RGB); working tree clean,
+  `origin/master` in sync. Tagged `v1.7-atomic`, pushed tag.
