@@ -224,7 +224,7 @@ static inline vec3 glt_eval_rgb(glt_model *m, vec3 pos, vec3 dir, vec3 norm,
         if (cy >= GLT_GRID_RES) cy = GLT_GRID_RES - 1;
         if (cz < 0) cz = 0;
         if (cz >= GLT_GRID_RES) cz = GLT_GRID_RES - 1;
-        int visited = 0;
+        int visited = 0, lkept = 0, lculled = 0;
         for (int dx = -1; dx <= 1; dx++)
         for (int dy = -1; dy <= 1; dy++)
         for (int dz = -1; dz <= 1; dz++) {
@@ -237,25 +237,41 @@ static inline vec3 glt_eval_rgb(glt_model *m, vec3 pos, vec3 dir, vec3 norm,
                 visited++;
                 /* full 13D weight (position pre-cull inside) */
                 float w = glt_kernel_weight(g, pos, dir, norm, albedo, roughness);
-                if (w <= 0.0f) { m->eval_culled++; continue; }
-                m->eval_kept++;
+                if (w <= 0.0f) { lculled++; continue; }
+                lkept++;
                 L = vadd(L, vmul(g->color, w));
+                /* rare path (~1% kept): atomic float add, safe under OpenMP */
+#pragma omp atomic
                 g->importance += w * (fabsf(g->color.x) + fabsf(g->color.y) + fabsf(g->color.z));
             }
         }
+        /* one atomic add per counter per query (not per gaussian visited) */
+#pragma omp atomic
         m->eval_total += visited;
+#pragma omp atomic
+        m->eval_kept += lkept;
+#pragma omp atomic
+        m->eval_culled += lculled;
         return L;
     }
+    int lkept = 0, lculled = 0, ltotal = 0;
     for (int i = 0; i < m->count; i++) {
         glt_gaussian *g = &m->gaussians[i];
         if (!g->alive) continue;
-        m->eval_total++;
+        ltotal++;
         float w = glt_kernel_weight(g, pos, dir, norm, albedo, roughness);
-        if (w <= 0.0f) { m->eval_culled++; continue; }
-        m->eval_kept++;
+        if (w <= 0.0f) { lculled++; continue; }
+        lkept++;
         L = vadd(L, vmul(g->color, w));
+#pragma omp atomic
         g->importance += w * (fabsf(g->color.x) + fabsf(g->color.y) + fabsf(g->color.z));
     }
+#pragma omp atomic
+    m->eval_total += ltotal;
+#pragma omp atomic
+    m->eval_kept += lkept;
+#pragma omp atomic
+    m->eval_culled += lculled;
     return L;
 }
 

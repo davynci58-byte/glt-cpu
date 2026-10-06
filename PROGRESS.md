@@ -341,3 +341,23 @@
   all PNG headers valid (800×600 RGB). Avg RGB matches README table
   exactly (cornell 98/89/75, bedroom 126/96/74, dining 207/185/161,
   staircase 134/134/150) — no table update needed.
+
+## 2026-10-06 — Fix racy GLT eval stats under OpenMP (atomic counters)
+- `glt_eval_rgb` in `src/glt.h` mutated shared perf counters
+  (`eval_total/kept/culled`) and `g->importance` with plain `++/+=`
+  from inside the OpenMP row-parallel render loop — a data race (lost
+  updates, thread-dependent keep-rate logs). `pathtrace`'s `g_rays`
+  already used `#pragma omp atomic`; the cache stats did not.
+- Fixed with batched per-query accounting: thread-local `lkept/lculled`
+  counters plus one `#pragma omp atomic` add per counter per query
+  (3 atomics/query instead of ~hundreds), and `#pragma omp atomic` on
+  the rare-path (`~1%` kept) `importance` float add. Same pattern in
+  both the Morton fast path and the full-scan fallback. Pragmas are
+  no-ops without `-fopenmp`, so single-threaded builds are unchanged.
+- Verified: `make clean && make` warning-free (exit 0); smoke test
+  200×150/4spp/train200 twice → identical md5
+  (`94c8b2deba941cc9e23c1db64a173306`, same as the 10-04 seed entry —
+  pixels untouched), avg 80.8/255 (not black), ~2.5–3.2 Mrays/s.
+  `OMP_NUM_THREADS=1/2/8` → identical pixels AND identical eval stats
+  (`2872862 total = 25212 kept + 2847650 culled`, keep 0.9%).
+  No re-render needed (render math untouched); 4× 800×600 PNGs stand.
