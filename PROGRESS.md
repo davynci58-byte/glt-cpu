@@ -371,3 +371,24 @@
   (`2872862 total = 25212 kept + 2847650 culled`, keep 0.9%).
 - 4× 800×600 PNGs valid (`file`: 800×600 RGB); working tree clean,
   `origin/master` in sync. Tagged `v1.7-atomic`, pushed tag.
+
+## 2026-10-14 — Fix broken plain `make` (/tmp 100% full again), verify
+- Plain `make` failed (`error writing to /tmp/cc*.s: No space left on
+  device`): /tmp (987M tmpfs) was 100% full from ~231 leaked hidden
+  `.b*.so` files (~5.3M each, Oct 11–13, same recurring tooling leak as
+  the 10-01 entry). `fuser` confirmed the stale ones are not open by
+  any process; deleted only `mtime +0` (>24h old), kept the ~70 fresh
+  ones. /tmp now 39% used (606M avail); plain `make clean && make`
+  warning-free (exit 0, no TMPDIR workaround needed).
+- Smoke test 200×150/4spp/train200: loss 1.10 (stable pred+1 denom),
+  avg 91.4/82.3/68.7 (not black), 0.009 ms/pixel, 3.26 Mrays/s, keep
+  0.9% (`2872862 total = 25212 kept + 2847650 culled`); md5
+  `94c8b2deba941cc9e23c1db64a173306` — bit-identical to the 10-04/10-06
+  deterministic-seed reference.
+- `git log 8a56e0d..HEAD -- src/` shows only the two known handled
+  changes (`--seed`, atomic counters; screenshots refreshed / verified
+  pixel-identical already), so no re-render. 4× 800×600 PNGs valid;
+  README checklist PASS (emoji title, screenshots, build/run, 3×
+  pseudocode, benchmarks, license); LICENSE + .gitignore present;
+  working tree clean, `origin/master` in sync; tags v1.0-glt…v1.7-atomic.
+- All AGENT.md phases remain complete. No code changes needed.
